@@ -6,173 +6,137 @@ from pathlib import Path
 from typing import Optional
 
 from .preprocess import load_kernel_versions, process_notebook
-from .retrieval import build_index, search
+from .retrieval import Retriever
 from .train_qlora import train
 from .model import Generator
 from .safety import TopologyFilter
+from .config import AWS_CONFIG
 
 def preprocess_cmd(args):
     """Handle preprocess command."""
-    from .preprocess import main as preprocess_main
-    preprocess_main()
+    kernel_versions = load_kernel_versions(args.input)
+    process_notebook(args.input, args.output)
 
 def index_cmd(args):
     """Handle index command."""
-    build_index(args.jsonl_path, args.out_dir)
+    retriever = Retriever(
+        opensearch_host=AWS_CONFIG["opensearch_host"],
+        s3_bucket=AWS_CONFIG["s3_bucket"],
+        region=AWS_CONFIG["region"]
+    )
+    retriever.build_index(args.input, args.output)
 
 def train_cmd(args):
     """Handle train command."""
-    train(args)
+    train(
+        base_model=args.base_model,
+        data_path=args.data,
+        output_dir=args.output,
+        num_epochs=args.epochs,
+        batch_size=args.batch_size,
+        gradient_accumulation_steps=args.grad_accum,
+        learning_rate=args.lr,
+        lora_rank=args.lora_rank,
+        lora_alpha=args.lora_alpha,
+        lora_dropout=args.lora_dropout
+    )
 
 def chat_cmd(args):
     """Handle chat command."""
-    # Initialize generator
-    generator = Generator(args.ckpt, args.retriever)
+    generator = Generator(
+        model_path=args.model,
+        retriever_path=args.retriever if args.retriever else None
+    )
+    safety_filter = TopologyFilter()
     
-    # Load safety filter
-    safety_filter = TopologyFilter(sig_db_path=args.sig_db)
-    
-    print("KaLactica Chat (type 'exit' to quit)")
-    print("-" * 50)
-    
+    print("Starting chat session. Type 'quit' to exit.")
     while True:
-        # Get user input
-        prompt = input("\nYou: ").strip()
-        if prompt.lower() == "exit":
+        user_input = input("\nYou: ").strip()
+        if user_input.lower() == "quit":
             break
         
-        # Generate response
-        response, chunks = generator(prompt, max_tokens=args.max_tokens)
-        
-        # Check safety
-        is_safe, stats = safety_filter.is_safe(response, args.domain)
+        response = generator.generate(user_input)
+        is_safe, stats = safety_filter.is_safe(response)
         
         if is_safe:
-            print("\nKaLactica:", response)
+            print(f"\nAssistant: {response}")
             if args.show_citations:
                 print("\nCitations:")
-                for chunk in chunks:
+                for chunk in generator.last_citations:
                     print(f"- {chunk['title']}")
         else:
-            print("\nKaLactica: I apologize, but I cannot generate a safe response for this query.")
-            if args.debug:
-                print("\nDebug info:", json.dumps(stats, indent=2))
+            print("\nAssistant: I apologize, but I cannot provide that response as it may not be safe.")
 
 def nb_cmd(args):
     """Handle notebook generation command."""
-    # Initialize generator
-    generator = Generator(args.ckpt, args.retriever)
+    generator = Generator(
+        model_path=args.model,
+        retriever_path=args.retriever if args.retriever else None
+    )
+    safety_filter = TopologyFilter()
     
-    # Load safety filter
-    safety_filter = TopologyFilter(sig_db_path=args.sig_db)
-    
-    # Generate notebook
-    prompt = f"Generate a Jupyter notebook for {args.task}"
-    response, chunks = generator(prompt, max_tokens=args.max_tokens)
-    
-    # Check safety
-    is_safe, stats = safety_filter.is_safe(response, args.domain)
+    notebook = generator.generate_notebook(args.task)
+    is_safe, stats = safety_filter.is_safe(notebook)
     
     if is_safe:
-        # Save notebook
         output_path = Path(args.output)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
         with open(output_path, "w") as f:
-            f.write(response)
+            json.dump(notebook, f, indent=2)
         
-        print(f"Notebook saved to {output_path}")
-        
+        print(f"Generated notebook saved to {output_path}")
         if args.show_citations:
             print("\nCitations:")
-            for chunk in chunks:
+            for chunk in generator.last_citations:
                 print(f"- {chunk['title']}")
     else:
-        print("Error: Generated notebook failed safety check")
-        if args.debug:
-            print("\nDebug info:", json.dumps(stats, indent=2))
+        print("Generated notebook did not pass safety checks.")
 
 def main():
+    """Main entry point for CLI."""
     parser = argparse.ArgumentParser(description="KaLactica CLI")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
     
     # Preprocess command
-    preprocess_parser = subparsers.add_parser("preprocess",
-                                            help="Preprocess Kaggle notebooks")
-    preprocess_parser.add_argument("--input", type=str, required=True,
-                                 help="Path to KernelVersions.csv")
-    preprocess_parser.add_argument("--sample", type=int,
-                                 help="Number of notebooks to sample")
-    preprocess_parser.add_argument("--output", type=str,
-                                 help="Output JSONL file path")
+    preprocess_parser = subparsers.add_parser("preprocess", help="Preprocess notebooks")
+    preprocess_parser.add_argument("--input", required=True, help="Input CSV file")
+    preprocess_parser.add_argument("--output", required=True, help="Output JSONL file")
     
     # Index command
-    index_parser = subparsers.add_parser("index",
-                                       help="Build FAISS index")
-    index_parser.add_argument("jsonl_path", type=str,
-                            help="Path to JSONL file")
-    index_parser.add_argument("--out-dir", type=str,
-                            help="Output directory")
+    index_parser = subparsers.add_parser("index", help="Build search index")
+    index_parser.add_argument("--input", required=True, help="Input JSONL file")
+    index_parser.add_argument("--output", help="Output directory")
     
     # Train command
-    train_parser = subparsers.add_parser("train",
-                                       help="Train model with QLoRA")
-    train_parser.add_argument("--base-model", type=str,
-                            help="Base model checkpoint")
-    train_parser.add_argument("--data-path", type=str, required=True,
-                            help="Path to training data")
-    train_parser.add_argument("--output-dir", type=str, required=True,
-                            help="Output directory")
-    train_parser.add_argument("--num-epochs", type=int, default=3,
-                            help="Number of training epochs")
-    train_parser.add_argument("--batch-size", type=int,
-                            help="Training batch size")
-    train_parser.add_argument("--learning-rate", type=float,
-                            help="Learning rate")
+    train_parser = subparsers.add_parser("train", help="Train model")
+    train_parser.add_argument("--base-model", default="facebook/galactica-1.3b", help="Base model")
+    train_parser.add_argument("--data", required=True, help="Training data path")
+    train_parser.add_argument("--output", required=True, help="Output directory")
+    train_parser.add_argument("--epochs", type=int, default=3, help="Number of epochs")
+    train_parser.add_argument("--batch-size", type=int, default=4, help="Batch size")
+    train_parser.add_argument("--grad-accum", type=int, default=4, help="Gradient accumulation steps")
+    train_parser.add_argument("--lr", type=float, default=2e-4, help="Learning rate")
+    train_parser.add_argument("--lora-rank", type=int, default=8, help="LoRA rank")
+    train_parser.add_argument("--lora-alpha", type=int, default=16, help="LoRA alpha")
+    train_parser.add_argument("--lora-dropout", type=float, default=0.1, help="LoRA dropout")
     
     # Chat command
-    chat_parser = subparsers.add_parser("chat",
-                                      help="Interactive chat mode")
-    chat_parser.add_argument("--ckpt", type=str, required=True,
-                           help="Model checkpoint path")
-    chat_parser.add_argument("--retriever", type=str, required=True,
-                           help="FAISS index directory")
-    chat_parser.add_argument("--sig-db", type=str,
-                           help="Signature database path")
-    chat_parser.add_argument("--domain", type=str, default="nlp",
-                           help="Target domain")
-    chat_parser.add_argument("--max-tokens", type=int, default=400,
-                           help="Maximum tokens to generate")
-    chat_parser.add_argument("--show-citations", action="store_true",
-                           help="Show citations")
-    chat_parser.add_argument("--debug", action="store_true",
-                           help="Show debug info")
+    chat_parser = subparsers.add_parser("chat", help="Start chat session")
+    chat_parser.add_argument("--model", required=True, help="Model path")
+    chat_parser.add_argument("--retriever", help="Retriever path")
+    chat_parser.add_argument("--show-citations", action="store_true", help="Show citations")
     
     # Notebook command
-    nb_parser = subparsers.add_parser("nb",
-                                    help="Generate notebook")
-    nb_parser.add_argument("--ckpt", type=str, required=True,
-                         help="Model checkpoint path")
-    nb_parser.add_argument("--retriever", type=str, required=True,
-                         help="FAISS index directory")
-    nb_parser.add_argument("--sig-db", type=str,
-                         help="Signature database path")
-    nb_parser.add_argument("--domain", type=str, default="nlp",
-                         help="Target domain")
-    nb_parser.add_argument("--task", type=str, required=True,
-                         help="Notebook task description")
-    nb_parser.add_argument("--output", type=str, required=True,
-                         help="Output notebook path")
-    nb_parser.add_argument("--max-tokens", type=int, default=400,
-                         help="Maximum tokens to generate")
-    nb_parser.add_argument("--show-citations", action="store_true",
-                         help="Show citations")
-    nb_parser.add_argument("--debug", action="store_true",
-                         help="Show debug info")
+    nb_parser = subparsers.add_parser("nb", help="Generate notebook")
+    nb_parser.add_argument("--model", required=True, help="Model path")
+    nb_parser.add_argument("--retriever", help="Retriever path")
+    nb_parser.add_argument("--task", required=True, help="Task description")
+    nb_parser.add_argument("--output", required=True, help="Output notebook path")
+    nb_parser.add_argument("--show-citations", action="store_true", help="Show citations")
     
     args = parser.parse_args()
     
-    # Run command
     if args.command == "preprocess":
         preprocess_cmd(args)
     elif args.command == "index":

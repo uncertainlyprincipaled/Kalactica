@@ -1,103 +1,102 @@
-"""Retrieval system for KaLactica using FAISS."""
+"""Retrieval module for KaLactica."""
 
 import json
-import numpy as np
-import faiss
 from pathlib import Path
-from typing import List, Tuple, Dict, Any
+from typing import List, Dict, Any, Optional
+import numpy as np
 from sentence_transformers import SentenceTransformer
-from tqdm import tqdm
-
-from .config import INDEX_DIR, RETRIEVAL_CONFIG
+from .aws import get_vector_db, get_aws_storage
 
 class Retriever:
-    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
-        """Initialize the retriever with a sentence transformer model."""
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2",
+                 opensearch_host: Optional[str] = None,
+                 s3_bucket: Optional[str] = None,
+                 region: str = "us-east-1"):
+        """Initialize retriever.
+        
+        Args:
+            model_name: Name of the sentence transformer model
+            opensearch_host: OpenSearch endpoint (optional)
+            s3_bucket: S3 bucket name (optional)
+            region: AWS region
+        """
         self.model = SentenceTransformer(model_name)
-        self.index = None
-        self.chunks = []
-        self.embedding_dim = RETRIEVAL_CONFIG["embedding_dim"]
+        self.vector_db = None
+        self.storage = None
+        
+        if opensearch_host:
+            self.vector_db = get_vector_db(opensearch_host, region)
+        if s3_bucket:
+            self.storage = get_aws_storage(s3_bucket, region)
     
-    def build_index(self, jsonl_path: str, out_dir: str = None) -> None:
-        """Build FAISS index from JSONL file."""
-        if out_dir is None:
-            out_dir = INDEX_DIR
-        out_dir = Path(out_dir)
-        out_dir.mkdir(parents=True, exist_ok=True)
+    def build_index(self, jsonl_path: str, output_dir: Optional[str] = None):
+        """Build vector index from JSONL file.
         
-        # Load and process chunks
-        chunks = []
-        with open(jsonl_path) as f:
-            for line in tqdm(f, desc="Loading chunks"):
-                chunk = json.loads(line)
-                chunks.append(chunk)
+        Args:
+            jsonl_path: Path to JSONL file
+            output_dir: Directory to save index (optional)
+        """
+        documents = []
+        embeddings = []
         
-        # Generate embeddings
-        texts = [chunk["content"] for chunk in chunks]
-        embeddings = self.model.encode(
-            texts,
-            batch_size=RETRIEVAL_CONFIG["search_batch_size"],
-            show_progress_bar=True
-        )
+        with open(jsonl_path, "r") as f:
+            for line in f:
+                doc = json.loads(line)
+                documents.append(doc)
+                embedding = self.model.encode(doc["content"])
+                embeddings.append(embedding)
         
-        # Build FAISS index
-        index = faiss.IndexFlatL2(self.embedding_dim)
-        index.add(embeddings.astype(np.float32))
+        if self.vector_db:
+            self.vector_db.add_documents(documents, embeddings)
         
-        # Save index and chunks
-        faiss.write_index(index, str(out_dir / "index.faiss"))
-        with open(out_dir / "chunks.json", "w") as f:
-            json.dump(chunks, f)
-        
-        self.index = index
-        self.chunks = chunks
+        if output_dir and not self.vector_db:
+            # Fallback to local storage if no vector DB
+            output_path = Path(output_dir)
+            output_path.mkdir(parents=True, exist_ok=True)
+            
+            np.save(output_path / "embeddings.npy", np.array(embeddings))
+            with open(output_path / "documents.json", "w") as f:
+                json.dump(documents, f)
     
-    def load_index(self, index_dir: str) -> None:
-        """Load existing FAISS index and chunks."""
-        index_dir = Path(index_dir)
-        if not (index_dir / "index.faiss").exists():
-            raise FileNotFoundError(f"No index found in {index_dir}")
+    def search(self, query: str, k: int = 5) -> List[Dict[str, Any]]:
+        """Search for similar documents.
         
-        self.index = faiss.read_index(str(index_dir / "index.faiss"))
-        with open(index_dir / "chunks.json") as f:
-            self.chunks = json.load(f)
+        Args:
+            query: Search query
+            k: Number of results to return
+        
+        Returns:
+            List of similar documents
+        """
+        query_embedding = self.model.encode(query)
+        
+        if self.vector_db:
+            return self.vector_db.search(query_embedding, k)
+        else:
+            raise NotImplementedError(
+                "Local search not implemented. Please provide OpenSearch host."
+            )
     
-    def search(self, text: str, k: int = 5) -> List[Tuple[float, Dict[str, Any]]]:
-        """Search for similar chunks using FAISS."""
-        if self.index is None:
-            raise RuntimeError("Index not built or loaded")
+    def save_to_s3(self, key: str, data: Any):
+        """Save data to S3.
         
-        # Generate query embedding
-        query_embedding = self.model.encode([text])[0]
-        
-        # Search index
-        distances, indices = self.index.search(
-            query_embedding.reshape(1, -1).astype(np.float32),
-            k
-        )
-        
-        # Return results
-        results = []
-        for dist, idx in zip(distances[0], indices[0]):
-            if idx < len(self.chunks):
-                results.append((float(dist), self.chunks[idx]))
-        
-        return results
-
-def build_index(jsonl_path: str, out_dir: str = None) -> None:
-    """Convenience function to build index."""
-    retriever = Retriever()
-    retriever.build_index(jsonl_path, out_dir)
-
-def search(text: str, k: int = 5, index_dir: str = None) -> List[Tuple[float, Dict[str, Any]]]:
-    """Convenience function to search index."""
-    if index_dir is None:
-        index_dir = INDEX_DIR
+        Args:
+            key: S3 object key
+            data: Data to save
+        """
+        if not self.storage:
+            raise ValueError("S3 bucket not configured")
+        self.storage.save_file(key, data)
     
-    retriever = Retriever()
-    try:
-        retriever.load_index(index_dir)
-    except FileNotFoundError:
-        raise RuntimeError(f"No index found in {index_dir}. Please build index first.")
-    
-    return retriever.search(text, k) 
+    def load_from_s3(self, key: str) -> Any:
+        """Load data from S3.
+        
+        Args:
+            key: S3 object key
+        
+        Returns:
+            Loaded data
+        """
+        if not self.storage:
+            raise ValueError("S3 bucket not configured")
+        return self.storage.load_file(key) 

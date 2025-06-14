@@ -1,116 +1,120 @@
-"""Core model architecture for KaLactica."""
+"""Model and generation module for KaLactica."""
 
+import json
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Tuple
 import torch
-import torch.nn as nn
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from peft import get_peft_model, LoraConfig, TaskType
-from typing import Dict, Any, List, Optional, Tuple
-
-from .config import MODEL_CONFIG
 from .retrieval import Retriever
+from .config import MODEL_CONFIG
 
-class KaLactica(nn.Module):
-    def __init__(self, base_ckpt: str = MODEL_CONFIG["base_model"],
-                 lora_path: Optional[str] = None):
-        """Initialize KaLactica model.
+class Generator:
+    def __init__(self, model_path: str, retriever_path: Optional[str] = None):
+        """Initialize generator.
         
         Args:
-            base_ckpt: Path to base model checkpoint
-            lora_path: Optional path to LoRA weights
+            model_path: Path to model checkpoint or model name
+            retriever_path: Path to retriever (optional)
         """
-        super().__init__()
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         
-        # Load base model and tokenizer
-        self.tokenizer = AutoTokenizer.from_pretrained(base_ckpt)
+        # Load model and tokenizer
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.model = AutoModelForCausalLM.from_pretrained(
-            base_ckpt,
-            torch_dtype=torch.float16,
+            model_path,
+            torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
             device_map="auto"
         )
         
-        # Configure LoRA
-        peft_config = LoraConfig(
-            task_type=TaskType.CAUSAL_LM,
-            inference_mode=False,
-            r=MODEL_CONFIG["lora_rank"],
-            lora_alpha=MODEL_CONFIG["lora_alpha"],
-            lora_dropout=MODEL_CONFIG["lora_dropout"],
-            target_modules=["q_proj", "v_proj"]
-        )
+        # Initialize retriever
+        self.retriever = None
+        if retriever_path:
+            self.retriever = Retriever()
+            self.retriever.load_index(retriever_path)
         
-        # Apply LoRA
-        self.model = get_peft_model(self.model, peft_config)
-        
-        # Load LoRA weights if provided
-        if lora_path:
-            self.model.load_state_dict(torch.load(lora_path), strict=False)
+        self.last_citations = []
     
-    def forward(self, input_ids: torch.Tensor,
-                attention_mask: Optional[torch.Tensor] = None,
-                labels: Optional[torch.Tensor] = None) -> Dict[str, torch.Tensor]:
-        """Forward pass through the model."""
-        outputs = self.model(
-            input_ids=input_ids,
-            attention_mask=attention_mask,
-            labels=labels
-        )
-        return outputs
-    
-    def generate(self, prompt: str, max_tokens: int = 400,
-                temperature: float = 0.7) -> str:
-        """Generate text from prompt."""
-        inputs = self.tokenizer(prompt, return_tensors="pt")
-        inputs = {k: v.to(self.model.device) for k, v in inputs.items()}
-        
-        outputs = self.model.generate(
-            **inputs,
-            max_new_tokens=max_tokens,
-            temperature=temperature,
-            do_sample=True,
-            pad_token_id=self.tokenizer.eos_token_id
-        )
-        
-        return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-
-class Generator:
-    def __init__(self, ckpt: str, retriever: Retriever):
-        """Initialize generator with model and retriever.
-        
-        Args:
-            ckpt: Path to model checkpoint
-            retriever: FAISS retriever instance
-        """
-        self.model = KaLactica(ckpt)
-        self.retriever = retriever
-    
-    def __call__(self, prompt: str, max_tokens: int = 400,
-                 k: int = 3) -> Tuple[str, List[Dict[str, Any]]]:
-        """Generate text with retrieved context.
+    def generate(self, prompt: str, max_tokens: int = 400) -> str:
+        """Generate text from prompt.
         
         Args:
             prompt: Input prompt
-            max_tokens: Maximum number of tokens to generate
-            k: Number of retrieved chunks to include
+            max_tokens: Maximum tokens to generate
         
         Returns:
-            Tuple of (generated_text, retrieved_chunks)
+            Generated text
         """
-        # Retrieve relevant chunks
-        chunks = self.retriever.search(prompt, k=k)
-        
-        # Construct prompt with retrieved context
-        context = "\n\n".join(chunk["content"] for _, chunk in chunks)
-        full_prompt = f"Context:\n{context}\n\nPrompt: {prompt}\n\nResponse:"
+        # Get relevant chunks if retriever is available
+        chunks = []
+        if self.retriever:
+            chunks = self.retriever.search(prompt)
+            self.last_citations = chunks
+            
+            # Add citations to prompt
+            if chunks:
+                prompt += "\n\nRelevant information:\n"
+                for chunk in chunks:
+                    prompt += f"- {chunk['content']}\n"
         
         # Generate response
-        response = self.model.generate(full_prompt, max_tokens=max_tokens)
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        outputs = self.model.generate(
+            **inputs,
+            max_new_tokens=max_tokens,
+            temperature=MODEL_CONFIG["temperature"],
+            top_p=MODEL_CONFIG["top_p"],
+            top_k=MODEL_CONFIG["top_k"],
+            do_sample=True
+        )
         
-        return response, [chunk for _, chunk in chunks]
+        return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
     
-    def save(self, path: str):
-        """Save model weights."""
-        torch.save(self.model.state_dict(), path)
-    
-    def load(self, path: str):
-        """Load model weights."""
-        self.model.load_state_dict(torch.load(path)) 
+    def generate_notebook(self, task: str) -> Dict[str, Any]:
+        """Generate a Jupyter notebook.
+        
+        Args:
+            task: Task description
+        
+        Returns:
+            Notebook as dictionary
+        """
+        # Generate notebook structure
+        prompt = f"""Create a Jupyter notebook for the following task:
+{task}
+
+The notebook should include:
+1. Data loading and preprocessing
+2. Exploratory data analysis
+3. Feature engineering
+4. Model training and evaluation
+5. Conclusions and next steps
+
+Format the response as a valid Jupyter notebook JSON structure."""
+
+        response = self.generate(prompt, max_tokens=1000)
+        
+        try:
+            # Try to parse as JSON
+            notebook = json.loads(response)
+        except json.JSONDecodeError:
+            # If not valid JSON, create a basic structure
+            notebook = {
+                "cells": [
+                    {
+                        "cell_type": "markdown",
+                        "metadata": {},
+                        "source": [f"# {task}\n\n" + response]
+                    }
+                ],
+                "metadata": {
+                    "kernelspec": {
+                        "display_name": "Python 3",
+                        "language": "python",
+                        "name": "python3"
+                    }
+                },
+                "nbformat": 4,
+                "nbformat_minor": 4
+            }
+        
+        return notebook 
