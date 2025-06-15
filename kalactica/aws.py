@@ -1,4 +1,8 @@
-"""AWS integration for KaLactica."""
+"""AWS integration for KaLactica.
+
+This module provides helpers for S3 and OpenSearch, including efficient upload/download
+and logic to avoid unnecessary S3 requests. Use these helpers to store and retrieve
+raw and processed data, minimizing S3 API calls."""
 
 import boto3
 import json
@@ -20,7 +24,10 @@ class AWSStorage:
         self.bucket = bucket_name
     
     def save_file(self, key: str, data: Any):
-        """Save data to S3."""
+        """Save data to S3. Avoids duplicate uploads by checking if the object exists."""
+        if self.exists(key):
+            print(f"[S3] {key} already exists, skipping upload.")
+            return
         if isinstance(data, (dict, list)):
             data = json.dumps(data)
         self.s3.put_object(
@@ -28,6 +35,7 @@ class AWSStorage:
             Key=key,
             Body=data
         )
+        print(f"[S3] Uploaded {key}")
     
     def load_file(self, key: str) -> Any:
         """Load data from S3."""
@@ -40,6 +48,23 @@ class AWSStorage:
             return json.loads(data)
         except json.JSONDecodeError:
             return data
+    
+    def download_file(self, key: str, dest: str):
+        """Download a file from S3 to local path if not already present."""
+        dest_path = Path(dest)
+        if dest_path.exists():
+            print(f"[S3] {dest} already exists locally, skipping download.")
+            return
+        self.s3.download_file(self.bucket, key, str(dest_path))
+        print(f"[S3] Downloaded {key} to {dest}")
+    
+    def exists(self, key: str) -> bool:
+        """Check if a file exists in S3 bucket."""
+        try:
+            self.s3.head_object(Bucket=self.bucket, Key=key)
+            return True
+        except self.s3.exceptions.ClientError:
+            return False
     
     def list_files(self, prefix: str = "") -> List[str]:
         """List files in S3 bucket."""
