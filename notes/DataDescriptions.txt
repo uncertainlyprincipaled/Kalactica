@@ -1,0 +1,203 @@
+overview
+Dataset Description
+You should use the Meta Kaggle and/or Meta Kaggle Code datasets in your submission.
+
+Meta Kaggle
+https://www.kaggle.com/datasets/kaggle/meta-kaggle
+
+This dataset contains public versions of tables about Kaggle competitions, dataset, notebooks, users, models, discussions, and more.
+
+import kagglehub
+
+# Download latest version
+path = kagglehub.dataset_download("kaggle/meta-kaggle")
+
+print("Path to dataset files:", path)
+Meta Kaggle Code
+https://www.kaggle.com/datasets/kaggle/meta-kaggle-code
+
+This dataset contains code from notebooks publicly shared on Kaggle.
+
+import kagglehub
+
+# Download latest version
+path = kagglehub.dataset_download("kaggle/meta-kaggle-code")
+
+print("Path to dataset files:", path)
+FAQ
+How do I join Meta Kaggle Code with Meta Kaggle?
+
+The files contained in Meta Kaggle Code are a subset of the KernelVersions in Meta Kaggle. The file names match the ids in the KernelVersions csv file. Whereas Meta Kaggle contains data for all interactive and commit sessions, Meta Kaggle Code contains only data for commit sessions.
+
+It would be useful if data on XYZ could be added to Meta Kaggle. Can you add it?
+
+We will occasionally add new fields to Meta Kaggle, but to ensure that everyone participating in this hackathon has fair access to the same data, we won't likely consider making significant changes. If you'd like to request something nonetheless, post your request explaining why it's necessary on the hackathon forums.
+
+I have a question about the Meta Kaggle or Meta Kaggle Code data model
+
+First, make sure you browse code shared on the Meta Kaggle and Meta Kaggle Code datasets. Someone may have already written code which answers your question.
+
+Then, ideally you ask on the respective discussion forums for the datasets so that others in the community can learn from the answer. Our team will make a best effort at responding to questions there. You may also use the hackathon forums to ask your question. We recommend making a reproducible Kaggle Notebook and ensuring it's attached to this hackathon to illustrate your question where relevant to further help others learn.
+
+Files
+1 files
+
+Size
+174 B
+
+Type
++ 1 other
+
+License
+CC0: Public Domain
+
+README(174 B)
+Welcome to the Meta Kaggle Hackathon
+
+This is a Hackathon with no provided dataset.
+
+Please refer to kaggle.com/competitions/meta-kaggle-hackathon/data for data inspiration.
+Data Explorer
+174 B
+
+README
+
+Summary
+1 file
+
+
+Download All
+kaggle competitions download -c meta-kaggle-hackathon
+Download data
+
+Meta KagglAbout Dataset
+Meta Kaggle
+Explore our public data on competitions, datasets, kernels (code / notebooks) and more
+Meta Kaggle may not be the Rosetta Stone of data science, but we do think there's a lot to learn (and plenty of fun to be had) from this collection of rich data about Kaggle’s community and activity.
+
+Strategizing to become a Competitions Grandmaster? Wondering who, where, and what goes into a winning team? Choosing evaluation metrics for your next data science project? The kernels published using this data can help. We also hope they'll spark some lively Kaggler conversations and be a useful resource for the larger data science community.
+
+Kaggle Leaderboard Performance
+
+This dataset is made available as CSV files through Kaggle Kernels. It contains tables on public activity from Competitions, Datasets, Kernels, Discussions, and more. The tables are updated daily.
+
+Please note: This data is not a complete dump of our database. Rows, columns, and tables have been filtered out and transformed.
+
+August 2023 update
+In August 2023, we released Meta Kaggle for Code, a companion to Meta Kaggle containing public, Apache 2.0 licensed notebook data. View the dataset and instructions for how to join it with Meta Kaggle here: https://www.kaggle.com/datasets/kaggle/meta-kaggle-code
+
+We also updated the license on Meta Kaggle from CC-BY-NC-SA to Apache 2.0.
+
+[1]: https://imgur.com/a/tPTXViVe 
+
+Meta Kaggle
+├── CompetitionTags.csv
+├── Competitions.csv
+├── DatasetTags.csv
+├── DatasetTaskSubmissions.csv
+├── DatasetTasks.csv
+├── DatasetVersions.csv
+├── DatasetVotes.csv
+├── Datasets.csv
+├── Datasources.csv
+├── EpisodeAgents.csv
+├── Episodes.csv
+├── ForumMessageReactions.csv
+├── ForumMessageVotes.csv
+├── ForumMessages.csv
+├── ForumTopics.csv
+├── Forums.csv
+├── KernelAcceleratorTypes.csv
+├── KernelLanguages.csv
+├── KernelTags.csv
+├── KernelVersionCompetitionSources.csv
+├── KernelVersionDatasetSources.csv
+├── KernelVersionKernelSources.csv
+├── KernelVersionModelSources.csv
+├── KernelVersions.csv
+├── KernelVotes.csv
+├── Kernels.csv
+├── ModelTags.csv
+├── ModelVariationVersions.csv
+├── ModelVariations.csv
+├── ModelVersions.csv
+├── ModelVotes.csv
+├── Models.csv
+├── Organizations.csv
+├── Submissions.csv
+├── Tags.csv
+├── TeamMemberships.csv
+├── Teams.csv
+├── UserAchievements.csv
+├── UserFollowers.csv
+├── UserOrganizations.csv
+└── Users.csv
+
+Meta Kaggle Code
+
+About Dataset
+Explore our public notebook content!
+Meta Kaggle Code is an extension to our popular Meta Kaggle dataset. This extension contains all the raw source code from hundreds of thousands of public, Apache 2.0 licensed Python and R notebooks versions on Kaggle used to analyze Datasets, make submissions to Competitions, and more. This represents nearly a decade of data spanning a period of tremendous evolution in the ways ML work is done.
+
+Why we’re releasing this dataset
+By collecting all of this code created by Kaggle’s community in one dataset, we hope to make it easier for the world to research and share insights about trends in our industry. With the growing significance of AI-assisted development, we expect this data can also be used to fine-tune models for ML-specific code generation tasks.
+
+Meta Kaggle for Code is also a continuation of our commitment to open data and research. This new dataset is a companion to Meta Kaggle which we originally released in 2016. On top of Meta Kaggle, our community has shared nearly 1,000 public code examples. Research papers written using Meta Kaggle have examined how data scientists collaboratively solve problems, analyzed overfitting in machine learning competitions, compared discussions between Kaggle and Stack Overflow communities, and more.
+
+The best part is Meta Kaggle enriches Meta Kaggle for Code. By joining the datasets together, you can easily understand which competitions code was run against, the progression tier of the code’s author, how many votes a notebook had, what kinds of comments it received, and much, much more. We hope the new potential for uncovering deep insights into how ML code is written feels just as limitless to you as it does to us!
+
+Sensitive data
+While we have made an attempt to filter out notebooks containing potentially sensitive information published by Kaggle users, the dataset may still contain such information. Research, publications, applications, etc. relying on this data should only use or report on publicly available, non-sensitive information.
+
+Joining with Meta Kaggle
+The files contained here are a subset of the KernelVersions in Meta Kaggle. The file names match the ids in the KernelVersions csv file. Whereas Meta Kaggle contains data for all interactive and commit sessions, Meta Kaggle Code contains only data for commit sessions.
+
+File organization
+The files are organized into a two-level directory structure. Each top level folder contains up to 1 million files, e.g. - folder 123 contains all versions from 123,000,000 to 123,999,999. Each sub folder contains up to 1 thousand files, e.g. - 123/456 contains all versions from 123,456,000 to 123,456,999. In practice, each folder will have many fewer than 1 thousand files due to private and interactive sessions.
+
+The ipynb files in this dataset hosted on Kaggle do not contain the output cells. If the outputs are required, the full set of ipynbs with the outputs embedded can be obtained from this public GCS bucket: kaggle-meta-kaggle-code-downloads. Note that this is a "requester pays" bucket. This means you will need a GCP account with billing enabled to download. Learn more here: https://cloud.google.com/storage/docs/requester-pays
+
+Questions / Comments
+We love feedback! Let us know in the Discussion tab.
+
+Happy Kaggling!
+
+Here’s a condensed text file-style representation of the directory structure shown across the three images, focusing on the hierarchy and file types while abbreviating repetitive content:
+
+yaml
+Copy
+Edit
+LargeDatasetRoot/  (297.15 GB)
+├── 0000/
+│   └── 000/
+│       ├── 1.r
+│       ├── 10.r
+│       ├── ...
+│       ├── 125.r
+│       └── ... (757 more .r files)
+├── 0001/
+├── 0002/
+├── ...
+├── 0027/
+├── 0028/
+│   ├── 28544.r
+│   ├── 28545.py
+│   ├── 28546.py
+│   ├── 28547.r
+│   ├── ...
+│   ├── 28566.r
+│   ├── 28568.r
+│   ├── 28570.py
+│   ├── ...
+│   └── 158 more (.py/.r mixed files)
+├── 0029/
+├── ...
+└── 0035/
+Notes:
+The directories are numerically named (0000 to 0035 and likely beyond).
+
+Inside, each contains subfolders (e.g., 000/ inside 0000/) with .r files (likely R scripts or data dumps).
+
+Some folders like 0028/ contain a mix of .py and .r files, suggesting Python and R scripts/data.
+
+For brevity, I’ve used ellipses and counters to indicate bulk files without listing every file.

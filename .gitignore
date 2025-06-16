@@ -51,3 +51,8 @@ checkpoints/
 *.npy
 *.pt
 *.safetensors
+
+# New additions from the code block
+*.json
+credentials
+config.json

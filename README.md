@@ -1,9 +1,47 @@
 # KaLactica
 
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Environment Setup](#environment-setup)
+   - [Local Development](#local-development)
+   - [Colab/Kaggle Setup](#colabkaggle-setup)
+   - [Lambda Labs Setup](#lambda-labs-setup)
+3. [Usage Instructions](#usage-instructions)
+   - [Preprocessing](#preprocessing)
+   - [Model Training](#model-training)
+   - [Retrieval System](#retrieval-system)
+   - [Memory System](#memory-system)
+4. [Architecture](#architecture)
+5. [Features](#features)
+6. [Requirements](#requirements)
+7. [Security and Best Practices](#security-and-best-practices)
+8. [Configuration](#configuration)
+9. [License](#license)
+
+## Introduction
+
 KaLactica is a memory- and topology-enhanced successor to Galactica, designed to generate domain-aware scientific prose and code with improved factual grounding and coherence. It combines retrieval-augmented generation, a hierarchical memory system, and topological curriculum learning to produce high-quality, verifiable outputs while maintaining a small computational footprint.
 
-## Quickstart
+### Key Innovations
+- **Memory-Enhanced Generation**: Utilizes a hierarchical memory system to maintain context and improve coherence
+- **Topology-Aware Learning**: Employs topological curriculum learning for progressive task complexity
+- **Retrieval-Augmented Outputs**: Combines FAISS indexing with dual-crop memory for improved factual grounding
+- **Safety-First Design**: Implements multiple layers of safety checks and consistency verification
 
+### Use Cases
+- Scientific paper generation and summarization
+- Code generation with domain awareness
+- Technical documentation creation
+- Research assistance and literature review
+
+## Environment Setup
+
+This section provides instructions for setting up KaLactica in different environments. Choose the setup that best matches your use case:
+- **Local Development**: For development and testing
+- **Colab/Kaggle**: For preprocessing and data preparation
+- **Lambda Labs**: For model training and fine-tuning
+
+### Local Development
 ```bash
 # Install in development mode
 pip install -e .
@@ -12,7 +50,113 @@ pip install -e .
 python demo.py
 ```
 
+### Colab/Kaggle Setup
+```python
+# Mount Google Drive (Colab only)
+from google.colab import drive
+drive.mount('/content/drive')
+
+# Install requirements
+!pip install -r requirements.txt
+
+# Set up Kaggle credentials
+!mkdir -p ~/.kaggle
+!cp /content/drive/MyDrive/Kalactica/.env/kaggle/kaggle.json ~/.kaggle/
+!chmod 600 ~/.kaggle/kaggle.json
+
+# Download datasets
+!kaggle datasets download -d kaggle/meta-kaggle
+!kaggle datasets download -d kaggle/meta-kaggle-code
+!unzip meta-kaggle.zip -d data/
+!unzip meta-kaggle-code.zip -d data/
+```
+
+### Lambda Labs Setup
+```bash
+# Install Lambda Labs CLI
+pip install lambda-cloud
+
+# Configure credentials
+lambda configure --api-key your_api_key
+
+# Launch instance
+lambda launch --instance-type gpu.1x.a10
+```
+
+## Usage Instructions
+
+KaLactica's components can be used in different environments based on their resource requirements. This section provides detailed instructions for each major component.
+
+### Preprocessing
+The preprocessing step is designed to run on CPU and can be executed on Colab, Kaggle, or local machines.
+
+#### Colab/Kaggle:
+```python
+# Run preprocessing
+!python -m kalactica.preprocess --input data/KernelVersions.csv --output data/processed.jsonl
+```
+
+#### Local:
+```bash
+python -m kalactica.preprocess --input data/KernelVersions.csv --output data/processed.jsonl
+```
+
+### Model Training
+Training requires GPU resources and should be run on Lambda Labs.
+
+#### Lambda Labs Instance:
+```bash
+# Clone repository
+git clone https://github.com/uncertainlyprincipaled/Kalactica.git
+cd Kalactica
+
+# Set up Python environment
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Copy credentials
+mkdir -p .env/lambda
+# Copy your credentials.json to .env/lambda/
+
+# Start training
+python -m kalactica.train_qlora
+```
+
+### Retrieval System
+The retrieval system can be run on any environment with sufficient memory.
+
+#### Local/Colab/Kaggle:
+```python
+from kalactica.retrieval import RetrievalSystem
+
+# Initialize system
+retrieval = RetrievalSystem()
+
+# Query the system
+results = retrieval.query("your query here")
+```
+
+### Memory System
+The memory system is designed to work across all environments.
+
+#### Any Environment:
+```python
+from kalactica.memory import MemorySystem
+
+# Initialize system
+memory = MemorySystem()
+
+# Add to memory
+memory.add("key", "value")
+
+# Retrieve from memory
+value = memory.get("key")
+```
+
 ## Architecture
+
+KaLactica's architecture is built around four core components that work together to provide enhanced generation capabilities.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -33,6 +177,8 @@ python demo.py
 
 ## Features
 
+KaLactica offers several key features that set it apart from traditional language models:
+
 - **Retrieval-Augmented Generation**: Dual-crop FAISS index for short-term and long-term memory
 - **Memory Hierarchy**: Tracks dialogue state, code executions, and consequence notes
 - **Topological Curriculum**: Orders tasks by Betti complexity for progressive learning
@@ -41,6 +187,8 @@ python demo.py
 
 ## Requirements
 
+To run KaLactica, you'll need the following software and hardware requirements:
+
 - Python 3.8+
 - PyTorch 2.0+
 - FAISS-CPU
@@ -48,124 +196,62 @@ python demo.py
 - PEFT
 - Gudhi (optional, for topology features)
 
-## How to Launch and Prepare Your EC2 Instance for KaLactica
+## Security and Best Practices
 
-1. **Launch an EC2 Instance**
-   - Go to the AWS Console → EC2 → Launch Instance.
-   - Choose an Ubuntu Server AMI (e.g., 22.04 or 24.04 LTS, 64-bit x86).
-   - Select an instance type (e.g., `t3.large` for CPU, `g5.xlarge` for GPU).
-   - Under **Network settings**, select the VPC that matches your OpenSearch domain.
-   - Choose a subnet ("No preference" is fine for most cases).
-   - Enable auto-assign public IP if you want to SSH from your local machine.
-   - Create or select a security group:
-     - Allow SSH (port 22) from your IP (recommended) or from anywhere (0.0.0.0/0) for testing.
-   - Create or select a key pair (download the `.pem` file and keep it safe).
-   - Launch the instance.
+KaLactica implements several security measures and best practices to ensure safe and efficient operation:
 
-2. **Find Your Instance's Public IP or DNS**
-   - In the EC2 dashboard, select your instance and note the **Public IPv4 address** or **Public DNS**.
+1. **File Permissions**
+   - Set credential files to 600 permissions
+   - Never commit credentials to version control
 
-3. **SSH into Your Instance**
-   - On your local machine, run:
-     ```sh
-     chmod 400 /path/to/kalactica-key.pem
-     ssh -i /path/to/kalactica-key.pem ubuntu@<your-ec2-public-ip>
-     ```
-   - Replace `/path/to/kalactica-key.pem` with your key file and `<your-ec2-public-ip>` with your instance's IP.
+2. **Environment Variables**
+   - Use different API keys for different environments
+   - Regularly rotate credentials
+   - Store sensitive data in environment variables
 
-4. **Transfer Files (e.g., kaggle.json) from Local to EC2**
-   - On your local machine, run:
-     ```sh
-     scp -i /path/to/kalactica-key.pem /path/to/kaggle.json ubuntu@<your-ec2-public-ip>:~/
-     ```
-   - On EC2, move it to the right place:
-     ```sh
-     mkdir -p ~/.kaggle
-     mv ~/kaggle.json ~/.kaggle/
-     chmod 600 ~/.kaggle/kaggle.json
-     ```
+3. **Cost Optimization**
+   - Use CPU runtime for preprocessing
+   - Monitor memory and GPU usage
+   - Clean up temporary files
+   - Use spot instances when possible
+   - Shut down instances when not in use
 
-5. **Install python3-venv and pip if missing**
-   - If you get errors about missing `venv` or `pip`, run:
-     ```sh
-     sudo apt update
-     sudo apt install python3-venv python3-pip python3-full -y
-     ```
-   - If `python3-pip` is still missing, use:
-     ```sh
-     curl -O https://bootstrap.pypa.io/get-pip.py
-     sudo python3 get-pip.py
-     ```
+## Configuration
 
-6. **Troubleshooting**
-   - If you see `Permission denied (publickey)`, check your `.pem` file path and permissions.
-   - If you see `no installation candidate` for pip/venv, make sure you ran `sudo apt update` first.
-   - If you see `externally-managed-environment` errors, always use a virtual environment for Python work.
-   - If you have network issues, check your security group and VPC/subnet settings.
+Proper configuration is essential for optimal performance. This section covers the necessary configuration files and settings:
 
-## How to Set Up the Environment on the EC2 Instance
+### Environment Files
+- `.env/aws/credentials`: AWS credentials for S3 and OpenSearch
+- `.env/kaggle/kaggle.json`: Kaggle API credentials
+- `.env/lambda/credentials.json`: Lambda Labs configuration
+- `.env/colab/config.json`: Colab runtime settings
 
-1. **Update and install system packages:**
-   ```sh
-   sudo apt update && sudo apt upgrade -y
-   sudo apt install python3-pip python3-venv git unzip -y
-   ```
-2. **Clone the repository:**
-   ```sh
-   git clone https://github.com/uncertainlyprincipaled/Kalactica.git
-   cd Kalactica
-   ```
-3. **Set up Python virtual environment:**
-   ```sh
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-4. **Install Python requirements:**
-   ```sh
-   pip install --upgrade pip
-   pip install -r requirements.txt
-   ```
-5. **Set up AWS and Kaggle credentials:**
-   - Upload your `.env` directory (with `aws/credentials` and `kaggle/kaggle.json`) to the EC2 instance, or create them there.
-   - Make sure your environment variables are loaded (the code uses `python-dotenv`).
+### .gitignore
+```
+# Credentials and configs
+.env/
+*.json
+credentials
+config.json
 
-## How to Run Preprocess on EC2 and Store Data
+# Model files
+*.npy
+*.pt
+*.safetensors
 
-1. **Download Meta Kaggle and Meta Kaggle Code datasets using Kaggle API:**
-   ```sh
-   pip install kaggle
-   mkdir -p ~/.kaggle
-   cp /path/to/kaggle.json ~/.kaggle/
-   chmod 600 ~/.kaggle/kaggle.json
-   kaggle datasets download -d kaggle/meta-kaggle
-   kaggle datasets download -d kaggle/meta-kaggle-code
-   unzip meta-kaggle.zip -d data/
-   unzip meta-kaggle-code.zip -d data/
-   ```
-2. **(Optional) Upload raw data to S3 for backup:**
-   ```sh
-   aws s3 cp data/meta-kaggle.zip s3://your-bucket-name/meta-kaggle.zip
-   aws s3 cp data/meta-kaggle-code.zip s3://your-bucket-name/meta-kaggle-code.zip
-   ```
-   - Limit the number of requests to S3 by uploading only once and using local copies for processing.
+# Data files
+*.csv
+*.jsonl
+*.zip
 
-## Instructions to Complete Preprocessing and Indexing
-
-1. **Run preprocessing:**
-   ```sh
-   source venv/bin/activate
-   python -m kalactica.preprocess --input data/KernelVersions.csv --output data/processed.jsonl
-   # Optionally, add --sample 1000 to process a subset for testing
-   ```
-2. **Index the data into OpenSearch:**
-   ```sh
-   kalactica index --input data/processed.jsonl
-   ```
-   - This will use your `.env/aws/credentials` for S3 and OpenSearch.
-3. **(Optional) Upload processed data to S3:**
-   ```sh
-   aws s3 cp data/processed.jsonl s3://your-bucket-name/processed.jsonl
-   ```
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+```
 
 ## License
 
