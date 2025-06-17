@@ -142,8 +142,9 @@ os.environ['DATA_DIR'] = '/kaggle/working/Kalactica/data'
 !python -m kalactica.validation \
     --kernel-versions /kaggle/input/meta-kaggle/KernelVersions.csv \
     --notebooks-dir /kaggle/input/meta-kaggle \
+    --languages /kaggle/input/meta-kaggle/KernelLanguages.csv \
     --output validation_results.json
-
+    
 # Preprocess (validation will run automatically if not skipped)
 !python -m kalactica.preprocess \
     --input /kaggle/input/meta-kaggle/KernelVersions.csv \

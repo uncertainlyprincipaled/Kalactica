@@ -58,6 +58,9 @@ def main():
     parser = argparse.ArgumentParser(description="Preprocess Kaggle notebook data")
     parser.add_argument("--input", type=str, required=True,
                       help="Path to KernelVersions.csv")
+    parser.add_argument("--languages", type=str, required=False,
+                      default="/kaggle/input/meta-kaggle/KernelLanguages.csv",
+                      help="Path to KernelLanguages.csv")
     parser.add_argument("--sample", type=int, default=None,
                       help="Number of notebooks to sample")
     parser.add_argument("--output", type=str,
@@ -81,8 +84,20 @@ def main():
             if input("Continue with preprocessing? (y/n): ").lower() != 'y':
                 return
     
-    # Load and sample data
+    # Load KernelVersions and KernelLanguages
     df = pd.read_csv(args.input)
+    lang_df = pd.read_csv(args.languages)
+    lang_map = dict(zip(lang_df['Id'], lang_df['Name']))
+
+    # Defensive check for required columns
+    required_cols = ['Id', 'Title', 'CurrentKernelVersionId', 'ScriptLanguageId']
+    missing = [col for col in required_cols if col not in df.columns]
+    if missing:
+        raise ValueError(f"Missing required columns: {missing}. Found columns: {list(df.columns)}")
+
+    # Add language name column
+    df['Language'] = df['ScriptLanguageId'].map(lang_map).fillna('unknown')
+
     if args.sample:
         df = df.sample(n=args.sample, random_state=42)
     

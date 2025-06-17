@@ -158,10 +158,14 @@ class DataValidator:
         
         return len(errors) == 0, errors
 
-    def validate_dataset(self, kernel_versions_path: Path, notebooks_dir: Path) -> Dict[str, Any]:
+    def validate_dataset(self, kernel_versions_path: Path, notebooks_dir: Path, languages_path: Path = Path("/kaggle/input/meta-kaggle/KernelLanguages.csv")) -> Dict[str, Any]:
         """Validate entire dataset."""
         try:
             df = pd.read_csv(kernel_versions_path)
+            lang_df = pd.read_csv(languages_path)
+            lang_map = dict(zip(lang_df['Id'], lang_df['Name']))
+            if 'ScriptLanguageId' in df.columns:
+                df['Language'] = df['ScriptLanguageId'].map(lang_map).fillna('unknown')
         except Exception as e:
             logger.error(f"Error reading KernelVersions.csv: {str(e)}")
             return self.validation_results
@@ -203,12 +207,28 @@ def main():
                       help="Directory containing notebook JSON files")
     parser.add_argument("--output", type=str,
                       help="Output JSON file for validation results")
+    parser.add_argument("--languages", type=str, required=False,
+                      default="/kaggle/input/meta-kaggle/KernelLanguages.csv",
+                      help="Path to KernelLanguages.csv")
     args = parser.parse_args()
+    
+    # Load KernelVersions and KernelLanguages
+    df = pd.read_csv(args.kernel_versions)
+    lang_df = pd.read_csv(args.languages)
+    lang_map = dict(zip(lang_df['Id'], lang_df['Name']))
+    # Defensive check for required columns
+    required_cols = ['Id', 'Title', 'CurrentKernelVersionId', 'ScriptLanguageId']
+    missing = [col for col in required_cols if col not in df.columns]
+    if missing:
+        raise ValueError(f"Missing required columns: {missing}. Found columns: {list(df.columns)}")
+    # Add language name column
+    df['Language'] = df['ScriptLanguageId'].map(lang_map).fillna('unknown')
     
     validator = DataValidator()
     results = validator.validate_dataset(
         Path(args.kernel_versions),
-        Path(args.notebooks_dir)
+        Path(args.notebooks_dir),
+        Path(args.languages)
     )
     
     if args.output:

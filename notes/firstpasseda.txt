@@ -1,0 +1,742 @@
+===== KernelTags.csv =====
+Columns: ['Id', 'KernelId', 'TagId']
+Dtypes:
+Id          int64
+KernelId    int64
+TagId       int64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id      KernelId          TagId
+count  9.093030e+05  9.093030e+05  909303.000000
+mean   3.877446e+06  2.565669e+07   14766.926687
+std    2.000487e+06  2.058286e+07    2844.161551
+min    3.000000e+00  2.780000e+02    1115.000000
+25%    2.623092e+06  1.287251e+07   13215.000000
+50%    3.545856e+06  1.874483e+07   16580.000000
+75%    5.200364e+06  3.292733e+07   16609.000000
+max    8.497252e+06  8.520607e+07   17196.000000
+
+===== ModelVariations.csv =====
+Columns: ['Id', 'ModelId', 'CurrentVariationSlug', 'ModelFramework', 'CurrentModelVariationVersionId', 'LicenseName', 'BaseModelVariationId', 'CurrentDatasourceVersionId']
+Dtypes:
+Id                                  int64
+ModelId                             int64
+CurrentVariationSlug               object
+ModelFramework                     object
+CurrentModelVariationVersionId    float64
+LicenseName                        object
+BaseModelVariationId              float64
+CurrentDatasourceVersionId        float64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                  Id        ModelId  CurrentModelVariationVersionId  \
+count   23063.000000   23063.000000                    22856.000000   
+mean   158869.394832  176121.112605                   191551.904139   
+std    106476.694576  110878.449449                   128774.235243   
+min        95.000000      14.000000                      142.000000   
+25%     67099.500000   88752.000000                    81616.250000   
+50%    148666.000000  169122.000000                   178471.500000   
+75%    248142.500000  268286.000000                   292269.750000   
+max    356611.000000  377905.000000                   437170.000000   
+
+       BaseModelVariationId  CurrentDatasourceVersionId  
+count            353.000000                2.287700e+04  
+mean           66198.569405                1.001381e+07  
+std            74414.800980                1.975977e+06  
+min              846.000000                4.904011e+06  
+25%             8358.000000                9.188029e+06  
+50%            37999.000000                1.028001e+07  
+75%            72254.000000                1.147638e+07  
+max           344369.000000                1.272441e+07  
+
+Categorical columns:
+       CurrentVariationSlug ModelFramework LicenseName
+count                 23061          23063       23053
+unique                 6821             22          36
+top                 default        PyTorch  Apache 2.0
+freq                  13596           8810       11869
+
+===== KernelVersionCompetitionSources.csv =====
+Columns: ['Id', 'KernelVersionId', 'SourceCompetitionId']
+Dtypes:
+Id                     int64
+KernelVersionId        int64
+SourceCompetitionId    int64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id  KernelVersionId  SourceCompetitionId
+count  4.780158e+06     4.780158e+06         4.780158e+06
+mean   4.079056e+07     8.932936e+07         2.508372e+04
+std    2.697064e+07     7.038884e+07         2.458302e+04
+min    1.028000e+03     2.000000e+00         2.435000e+03
+25%    1.757930e+07     2.949148e+07         5.407000e+03
+50%    4.031451e+07     7.662800e+07         1.688000e+04
+75%    6.381123e+07     1.434550e+08         3.437700e+04
+max    9.032463e+07     2.457588e+08         1.053770e+05
+
+===== Datasets.csv =====
+/tmp/ipykernel_250/388099163.py:9: DtypeWarning: Columns (15) have mixed types. Specify dtype option on import or set low_memory=False.
+  df = pd.read_csv(file_path)
+Columns: ['Id', 'CreatorUserId', 'OwnerUserId', 'OwnerOrganizationId', 'CurrentDatasetVersionId', 'CurrentDatasourceVersionId', 'ForumId', 'Type', 'CreationDate', 'LastActivityDate', 'TotalViews', 'TotalDownloads', 'TotalVotes', 'TotalKernels', 'Medal', 'MedalAwardDate']
+Dtypes:
+Id                              int64
+CreatorUserId                   int64
+OwnerUserId                   float64
+OwnerOrganizationId           float64
+CurrentDatasetVersionId       float64
+CurrentDatasourceVersionId    float64
+ForumId                         int64
+Type                           object
+CreationDate                   object
+LastActivityDate               object
+TotalViews                      int64
+TotalDownloads                  int64
+TotalVotes                      int64
+TotalKernels                    int64
+Medal                         float64
+MedalAwardDate                 object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id  CreatorUserId   OwnerUserId  OwnerOrganizationId  \
+count  4.952340e+05   4.952340e+05  4.926790e+05          2555.000000   
+mean   3.795497e+06   1.078001e+07  1.082402e+07          1231.310372   
+std    2.200404e+06   7.122216e+06  7.107451e+06          1247.695861   
+min    6.000000e+00   1.000000e+00  3.680000e+02             2.000000   
+25%    1.854217e+06   4.731992e+06  4.760409e+06           265.000000   
+50%    3.756060e+06   9.915475e+06  9.970342e+06           959.000000   
+75%    5.672908e+06   1.624593e+07  1.626551e+07          1606.000000   
+max    7.674461e+06   2.740932e+07  2.740932e+07          5154.000000   
+
+       CurrentDatasetVersionId  CurrentDatasourceVersionId       ForumId  \
+count             4.950040e+05                4.949930e+05  4.952340e+05   
+mean              6.346961e+06                6.494283e+06  3.922758e+06   
+std               3.531368e+06                3.652963e+06  2.320885e+06   
+min               5.800000e+01                5.800000e+01  7.620000e+02   
+25%               3.070839e+06                3.119668e+06  1.877181e+06   
+50%               6.565130e+06                6.648306e+06  3.829408e+06   
+75%               9.391600e+06                9.593129e+06  5.869293e+06   
+max               1.218463e+07                1.272251e+07  8.146221e+06   
+
+         TotalViews  TotalDownloads     TotalVotes   TotalKernels  \
+count  4.952340e+05   495234.000000  495234.000000  495234.000000   
+mean   1.965867e+03      257.466993       4.637230       1.689397   
+std    2.880075e+04     4351.544156      92.912363      34.970292   
+min    0.000000e+00        0.000000       0.000000       0.000000   
+25%    4.400000e+01        3.000000       0.000000       0.000000   
+50%    1.410000e+02        7.000000       0.000000       0.000000   
+75%    9.320000e+02       28.000000       1.000000       1.000000   
+max    1.184982e+07   902352.000000   52646.000000    7409.000000   
+
+              Medal  
+count  31387.000000  
+mean       2.741358  
+std        0.547680  
+min        1.000000  
+25%        3.000000  
+50%        3.000000  
+75%        3.000000  
+max        3.000000  
+
+Categorical columns:
+           Type         CreationDate LastActivityDate MedalAwardDate
+count    495234               495234           495234          29225
+unique        1               494222             2823           1868
+top     Dataset  09/26/2024 07:06:56       06/21/2024     11/06/2019
+freq     495234                    5             5109            838
+
+===== KernelVersionKernelSources.csv =====
+Columns: ['Id', 'KernelVersionId', 'SourceKernelVersionId']
+Dtypes:
+Id                       int64
+KernelVersionId          int64
+SourceKernelVersionId    int64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id  KernelVersionId  SourceKernelVersionId
+count  1.097311e+06     1.097311e+06           1.097311e+06
+mean   2.457443e+07     1.249783e+08           1.162686e+08
+std    1.510885e+07     7.172317e+07           7.013119e+07
+min    9.000000e+00     1.767502e+06           6.670000e+03
+25%    1.135834e+07     5.935916e+07           5.209692e+07
+50%    2.351991e+07     1.256332e+08           1.108469e+08
+75%    3.716757e+07     1.881385e+08           1.753995e+08
+max    5.364712e+07     2.457815e+08           2.457563e+08
+
+===== KernelVotes.csv =====
+Columns: ['Id', 'UserId', 'KernelVersionId', 'VoteDate']
+Dtypes:
+Id                  int64
+UserId              int64
+KernelVersionId     int64
+VoteDate           object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id        UserId  KernelVersionId
+count  5.795220e+06  5.795220e+06     5.795220e+06
+mean   4.238710e+06  8.516856e+06     9.742976e+07
+std    2.455069e+06  6.641337e+06     6.765419e+07
+min    2.300000e+01  3.810000e+02     1.860000e+02
+25%    2.086590e+06  3.012786e+06     3.793354e+07
+50%    4.242394e+06  6.693435e+06     9.474432e+07
+75%    6.402548e+06  1.322917e+07     1.532779e+08
+max    8.426683e+06  2.741726e+07     2.457845e+08
+
+Categorical columns:
+          VoteDate
+count      5795220
+unique        3725
+top     02/12/2025
+freq         15007
+
+===== Submissions.csv =====
+/tmp/ipykernel_250/388099163.py:9: DtypeWarning: Columns (7) have mixed types. Specify dtype option on import or set low_memory=False.
+  df = pd.read_csv(file_path)
+Columns: ['Id', 'SubmittedUserId', 'TeamId', 'SourceKernelVersionId', 'SubmissionDate', 'ScoreDate', 'IsAfterDeadline', 'IsSelected', 'PublicScoreLeaderboardDisplay', 'PublicScoreFullPrecision', 'PrivateScoreLeaderboardDisplay', 'PrivateScoreFullPrecision']
+Dtypes:
+Id                                  int64
+SubmittedUserId                   float64
+TeamId                              int64
+SourceKernelVersionId             float64
+SubmissionDate                     object
+ScoreDate                          object
+IsAfterDeadline                      bool
+IsSelected                         object
+PublicScoreLeaderboardDisplay     float64
+PublicScoreFullPrecision          float64
+PrivateScoreLeaderboardDisplay    float64
+PrivateScoreFullPrecision         float64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+/usr/local/lib/python3.11/dist-packages/numpy/core/_methods.py:49: RuntimeWarning: overflow encountered in reduce
+  return umr_sum(a, axis, dtype, out, keepdims, initial, where)
+/usr/local/lib/python3.11/dist-packages/numpy/core/_methods.py:49: RuntimeWarning: overflow encountered in reduce
+  return umr_sum(a, axis, dtype, out, keepdims, initial, where)
+/usr/local/lib/python3.11/dist-packages/numpy/core/_methods.py:49: RuntimeWarning: overflow encountered in reduce
+  return umr_sum(a, axis, dtype, out, keepdims, initial, where)
+/usr/local/lib/python3.11/dist-packages/numpy/core/_methods.py:49: RuntimeWarning: overflow encountered in reduce
+  return umr_sum(a, axis, dtype, out, keepdims, initial, where)
+                 Id  SubmittedUserId        TeamId  SourceKernelVersionId  \
+count  1.599742e+07     1.599607e+07  1.599742e+07           5.820064e+06   
+mean   1.953500e+07     4.751176e+06  5.878891e+06           1.072574e+08   
+std    1.302184e+07     5.589051e+06  4.319376e+06           6.891750e+07   
+min    2.180000e+03     6.200000e+01  4.960000e+02           1.275000e+03   
+25%    7.930830e+06     6.825010e+05  1.717184e+06           4.639589e+07   
+50%    1.835123e+07     2.514988e+06  5.684337e+06           1.018385e+08   
+75%    3.010258e+07     6.813275e+06  9.646397e+06           1.607193e+08   
+max    4.555316e+07     2.741605e+07  1.398034e+07           2.457858e+08   
+
+       PublicScoreLeaderboardDisplay  PublicScoreFullPrecision  \
+count                   1.531149e+07              1.531130e+07   
+mean                             inf                       inf   
+std                              inf                       inf   
+min                     0.000000e+00            -4.146105e+275   
+25%                     4.657200e-01              4.594698e-01   
+50%                     7.165200e-01              7.101968e-01   
+75%                     9.405400e-01              9.356810e-01   
+max                    1.797693e+308             1.797693e+308   
+
+       PrivateScoreLeaderboardDisplay  PrivateScoreFullPrecision  
+count                    1.531130e+07               1.531130e+07  
+mean                              inf                        inf  
+std                               inf                        inf  
+min                      0.000000e+00             -1.646050e+273  
+25%                      4.686300e-01               4.596971e-01  
+50%                      7.256500e-01               7.170523e-01  
+75%                      9.385200e-01               9.307549e-01  
+max                     1.797693e+308              1.797693e+308  
+
+Categorical columns:
+       SubmissionDate   ScoreDate IsSelected
+count        15997415    15440056   15311297
+unique           5526        4242          2
+top        12/18/2023  02/22/2021      False
+freq            26217       77227   14901752
+
+===== KernelLanguages.csv =====
+Columns: ['Id', 'Name', 'DisplayName', 'IsNotebook']
+Dtypes:
+Id              int64
+Name           object
+DisplayName    object
+IsNotebook       bool
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+              Id
+count  10.000000
+mean    9.500000
+std     5.400617
+min     1.000000
+25%     5.750000
+50%    10.500000
+75%    13.750000
+max    16.000000
+
+Categorical columns:
+       Name DisplayName
+count    10          10
+unique   10           2
+top       R           R
+freq      1           6
+
+===== Users.csv =====
+Columns: ['Id', 'UserName', 'DisplayName', 'RegisterDate', 'PerformanceTier', 'Country', 'LocationSharingOptOut']
+Dtypes:
+Id                        int64
+UserName                 object
+DisplayName              object
+RegisterDate             object
+PerformanceTier           int64
+Country                  object
+LocationSharingOptOut      bool
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id  PerformanceTier
+count  2.464836e+07     2.464836e+07
+mean   1.377406e+07     1.275830e-02
+std    8.061977e+06     1.236159e-01
+min    1.000000e+00     0.000000e+00
+25%    6.683834e+06     0.000000e+00
+50%    1.372875e+07     0.000000e+00
+75%    2.103959e+07     0.000000e+00
+max    2.741768e+07     5.000000e+00
+
+Categorical columns:
+          UserName DisplayName RegisterDate        Country
+count     24648355    24647995     24648356        1336364
+unique    24648355    21639736         5579            274
+top     kaggleteam    John Doe   03/31/2025  United States
+freq             1        6536        30711         390832
+
+===== ForumMessageVotes.csv =====
+Columns: ['Id', 'ForumMessageId', 'FromUserId', 'ToUserId', 'VoteDate']
+Dtypes:
+Id                 int64
+ForumMessageId     int64
+FromUserId         int64
+ToUserId           int64
+VoteDate          object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id  ForumMessageId    FromUserId      ToUserId
+count  3.721530e+06    3.721530e+06  3.721530e+06  3.721530e+06
+mean   2.376753e+06    1.565007e+06  5.828173e+06  5.063161e+06
+std    1.457124e+06    9.242562e+05  5.899741e+06  5.432445e+06
+min   -1.000000e+00    1.000000e+00 -1.000000e+00  3.680000e+02
+25%    1.089301e+06    7.306260e+05  1.133510e+06  9.334800e+05
+50%    2.420082e+06    1.543939e+06  3.845254e+06  3.012786e+06
+75%    3.659645e+06    2.395363e+06  8.850162e+06  7.860947e+06
+max    4.857978e+06    3.225450e+06  2.741382e+07  2.739835e+07
+
+Categorical columns:
+          VoteDate
+count      3576760
+unique        5141
+top     08/03/2021
+freq         20582
+
+===== Competitions.csv =====
+Columns: ['Id', 'Slug', 'Title', 'Subtitle', 'HostSegmentTitle', 'ForumId', 'OrganizationId', 'EnabledDate', 'DeadlineDate', 'ProhibitNewEntrantsDeadlineDate', 'TeamMergerDeadlineDate', 'TeamModelDeadlineDate', 'ModelSubmissionDeadlineDate', 'FinalLeaderboardHasBeenVerified', 'HasKernels', 'OnlyAllowKernelSubmissions', 'HasLeaderboard', 'LeaderboardPercentage', 'ScoreTruncationNumDecimals', 'EvaluationAlgorithmAbbreviation', 'EvaluationAlgorithmName', 'EvaluationAlgorithmDescription', 'EvaluationAlgorithmIsMax', 'MaxDailySubmissions', 'NumScoredSubmissions', 'MaxTeamSize', 'BanTeamMergers', 'EnableTeamModels', 'RewardType', 'RewardQuantity', 'NumPrizes', 'UserRankMultiplier', 'CanQualifyTiers', 'TotalTeams', 'TotalCompetitors', 'TotalSubmissions', 'LicenseName', 'Overview', 'Rules', 'DatasetDescription', 'TotalCompressedBytes', 'TotalUncompressedBytes', 'ValidationSetName', 'ValidationSetValue', 'EnableSubmissionModelHashes', 'EnableSubmissionModelAttachments', 'HostName', 'CompetitionTypeId']
+Dtypes:
+Id                                    int64
+Slug                                 object
+Title                                object
+Subtitle                             object
+HostSegmentTitle                     object
+ForumId                             float64
+OrganizationId                      float64
+EnabledDate                          object
+DeadlineDate                         object
+ProhibitNewEntrantsDeadlineDate      object
+TeamMergerDeadlineDate               object
+TeamModelDeadlineDate                object
+ModelSubmissionDeadlineDate          object
+FinalLeaderboardHasBeenVerified        bool
+HasKernels                             bool
+OnlyAllowKernelSubmissions             bool
+HasLeaderboard                         bool
+LeaderboardPercentage                 int64
+ScoreTruncationNumDecimals            int64
+EvaluationAlgorithmAbbreviation      object
+EvaluationAlgorithmName              object
+EvaluationAlgorithmDescription       object
+EvaluationAlgorithmIsMax             object
+MaxDailySubmissions                   int64
+NumScoredSubmissions                  int64
+MaxTeamSize                           int64
+BanTeamMergers                         bool
+EnableTeamModels                       bool
+RewardType                           object
+RewardQuantity                      float64
+NumPrizes                             int64
+UserRankMultiplier                  float64
+CanQualifyTiers                        bool
+TotalTeams                            int64
+TotalCompetitors                      int64
+TotalSubmissions                      int64
+LicenseName                          object
+Overview                             object
+Rules                                object
+DatasetDescription                   object
+TotalCompressedBytes                float64
+TotalUncompressedBytes              float64
+ValidationSetName                   float64
+ValidationSetValue                  float64
+EnableSubmissionModelHashes            bool
+EnableSubmissionModelAttachments       bool
+HostName                            float64
+CompetitionTypeId                     int64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                  Id       ForumId  OrganizationId  LeaderboardPercentage  \
+count    9709.000000  5.736000e+03      631.000000            9709.000000   
+mean    40274.119477  8.679630e+05     1686.188590              53.113606   
+std     28425.045062  8.430877e+05     1677.279029              30.671834   
+min      2408.000000  1.000000e+00        2.000000               0.000000   
+25%     18323.000000  1.369838e+05        4.000000              30.000000   
+50%     31755.000000  6.922620e+05     1099.000000              50.000000   
+75%     61656.000000  1.407123e+06     3733.000000              80.000000   
+max    105384.000000  7.169003e+06     5140.000000             100.000000   
+
+       ScoreTruncationNumDecimals  MaxDailySubmissions  NumScoredSubmissions  \
+count                 9709.000000          9709.000000          9.709000e+03   
+mean                     4.929344           122.412504          1.136404e+04   
+std                      0.707655         10150.795628          1.019927e+06   
+min                      0.000000             0.000000          1.000000e+00   
+25%                      5.000000             5.000000          2.000000e+00   
+50%                      5.000000            10.000000          2.000000e+00   
+75%                      5.000000            20.000000          2.000000e+00   
+max                     12.000000       1000000.000000          1.000000e+08   
+
+       MaxTeamSize  RewardQuantity    NumPrizes  UserRankMultiplier  \
+count  9709.000000    1.615000e+03  9709.000000         9709.000000   
+mean     10.084252    1.896920e+04     1.113709            0.046071   
+std       8.238632    1.032564e+05     0.867657            0.209530   
+min       1.000000    0.000000e+00     0.000000            0.000000   
+25%       1.000000    0.000000e+00     1.000000            0.000000   
+50%      10.000000    0.000000e+00     1.000000            0.000000   
+75%      20.000000    5.000000e+03     1.000000            0.000000   
+max      20.000000    2.117152e+06    13.000000            2.000000   
+
+         TotalTeams  TotalCompetitors  TotalSubmissions  TotalCompressedBytes  \
+count   9709.000000       9709.000000       9709.000000          9.667000e+03   
+mean     109.510042        126.472242       1373.809764          1.453958e+09   
+std      480.026387        540.030581       6978.714723          1.528592e+10   
+min        0.000000          0.000000          0.000000          0.000000e+00   
+25%        2.000000          2.000000          6.000000          9.889750e+04   
+50%       12.000000         15.000000         67.000000          1.931734e+06   
+75%       37.000000         45.000000        294.000000          5.329105e+07   
+max    16991.000000      18166.000000     144599.000000          7.910975e+11   
+
+       TotalUncompressedBytes  ValidationSetName  ValidationSetValue  \
+count            9.667000e+03                0.0                 0.0   
+mean             1.937486e+09                NaN                 NaN   
+std              2.025536e+10                NaN                 NaN   
+min              0.000000e+00                NaN                 NaN   
+25%              2.977305e+05                NaN                 NaN   
+50%              4.659453e+06                NaN                 NaN   
+75%              1.166994e+08                NaN                 NaN   
+max              9.802372e+11                NaN                 NaN   
+
+       HostName  CompetitionTypeId  
+count       0.0             9709.0  
+mean        NaN                1.0  
+std         NaN                0.0  
+min         NaN                1.0  
+25%         NaN                1.0  
+50%         NaN                1.0  
+75%         NaN                1.0  
+max         NaN                1.0  
+
+Categorical columns:
+                  Slug                               Title  Subtitle  \
+count             9709                                9709      9693   
+unique            9709                                9071      7975   
+top     Eurovision2010  Telecom Churn Case Study Hackathon  Have fun   
+freq                 1                                  32        38   
+
+       HostSegmentTitle          EnabledDate         DeadlineDate  \
+count              9709                 9709                 9709   
+unique                7                 9630                 6059   
+top           Community  06/29/2020 10:00:00  06/28/2020 23:59:00   
+freq               9032                    6                   53   
+
+       ProhibitNewEntrantsDeadlineDate TeamMergerDeadlineDate  \
+count                              391                    385   
+unique                             341                    338   
+top                05/19/2020 23:59:00    05/19/2021 23:59:00   
+freq                                 5                      5   
+
+       TeamModelDeadlineDate ModelSubmissionDeadlineDate  \
+count                    306                          14   
+unique                   248                          14   
+top      12/31/2017 00:00:00         04/22/2012 23:59:00   
+freq                       6                           1   
+
+       EvaluationAlgorithmAbbreviation  EvaluationAlgorithmName  \
+count                             9678                     9678   
+unique                             484                      405   
+top             CategorizationAccuracy  Categorization Accuracy   
+freq                              2708                     2708   
+
+                   EvaluationAlgorithmDescription EvaluationAlgorithmIsMax  \
+count                                        9417                     9678   
+unique                                        274                        2   
+top     Percentage of correctly categorized items                     True   
+freq                                         2708                     6505   
+
+       RewardType                   LicenseName  \
+count        1054                          9659   
+unique          8                            14   
+top           USD  Subject to Competition Rules   
+freq          506                          8490   
+
+                                                 Overview  \
+count                                                9692   
+unique                                               8589   
+top     # Description\n\n\n----------------------\n# E...   
+freq                                                   56   
+
+                                                    Rules  \
+count                                                9704   
+unique                                               4520   
+top     # Competition Rules\n\nThis is a page where yo...   
+freq                                                 2560   
+
+           DatasetDescription  
+count                    9642  
+unique                   7303  
+top     # Dataset Description  
+freq                      409  
+
+===== DatasetTaskSubmissions.csv =====
+Columns: ['Id', 'DatasetTaskId', 'SubmittedUserId', 'CreationDate', 'KernelId', 'DatasetId', 'AcceptedDate']
+Dtypes:
+Id                   int64
+DatasetTaskId        int64
+SubmittedUserId    float64
+CreationDate        object
+KernelId           float64
+DatasetId          float64
+AcceptedDate        object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id  DatasetTaskId  SubmittedUserId      KernelId  \
+count  10245.000000   10245.000000     1.004700e+04  9.992000e+03   
+mean    5568.452709    2454.644705     4.628375e+06  1.444451e+07   
+std     3207.863474    2206.247920     2.280744e+06  4.817055e+06   
+min        1.000000       1.000000     2.340000e+03  1.230000e+02   
+25%     2769.000000     570.000000     2.975420e+06  1.009751e+07   
+50%     5557.000000    1699.000000     4.794552e+06  1.379828e+07   
+75%     8377.000000    3831.000000     6.327049e+06  1.850926e+07   
+max    11067.000000    7028.000000     9.092569e+06  2.268431e+07   
+
+          DatasetId  
+count  2.530000e+02  
+mean   1.116277e+06  
+std    3.655224e+05  
+min    2.521000e+03  
+25%    8.162580e+05  
+50%    1.158397e+06  
+75%    1.427269e+06  
+max    1.781634e+06  
+
+Categorical columns:
+               CreationDate         AcceptedDate
+count                 10245                  366
+unique                10226                  366
+top     05/29/2021 08:52:08  12/09/2019 10:18:28
+freq                      5                    1
+
+===== UserAchievements.csv =====
+/usr/local/lib/python3.11/dist-packages/pandas/io/formats/format.py:1458: RuntimeWarning: invalid value encountered in greater
+  has_large_values = (abs_vals > 1e6).any()
+/usr/local/lib/python3.11/dist-packages/pandas/io/formats/format.py:1459: RuntimeWarning: invalid value encountered in less
+  has_small_values = ((abs_vals < 10 ** (-self.digits)) & (abs_vals > 0)).any()
+/usr/local/lib/python3.11/dist-packages/pandas/io/formats/format.py:1459: RuntimeWarning: invalid value encountered in greater
+  has_small_values = ((abs_vals < 10 ** (-self.digits)) & (abs_vals > 0)).any()
+Columns: ['Id', 'UserId', 'AchievementType', 'Tier', 'TierAchievementDate', 'Points', 'CurrentRanking', 'HighestRanking', 'TotalGold', 'TotalSilver', 'TotalBronze']
+Dtypes:
+Id                       int64
+UserId                   int64
+AchievementType         object
+Tier                     int64
+TierAchievementDate     object
+Points                   int64
+CurrentRanking         float64
+HighestRanking         float64
+TotalGold                int64
+TotalSilver              int64
+TotalBronze              int64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id        UserId          Tier        Points  CurrentRanking  \
+count  9.859332e+07  9.859332e+07  9.859332e+07  9.859332e+07    30103.000000   
+mean   1.681205e+08  1.377404e+07  1.198842e-02  6.571097e-01     4889.129755   
+std    6.191493e+07  8.061969e+06  1.125675e-01  8.780704e+01     3616.186838   
+min    3.739819e+06  1.000000e+00  0.000000e+00  0.000000e+00        1.000000   
+25%    1.537502e+08  6.683827e+06  0.000000e+00  0.000000e+00     1882.000000   
+50%    1.814570e+08  1.372873e+07  0.000000e+00  0.000000e+00     3942.000000   
+75%    2.105405e+08  2.103957e+07  0.000000e+00  0.000000e+00     7559.000000   
+max    2.359874e+08  2.741765e+07  4.000000e+00  1.613170e+05    13517.000000   
+
+       HighestRanking     TotalGold   TotalSilver   TotalBronze  
+count    30619.000000  9.859332e+07  9.859332e+07  9.859332e+07  
+mean      1199.795356  5.832647e-04  1.234080e-03  1.270142e-02  
+std       1610.100928  1.596674e-01  1.898986e-01  2.473407e+00  
+min          0.000000  0.000000e+00  0.000000e+00  0.000000e+00  
+25%        353.000000  0.000000e+00  0.000000e+00  0.000000e+00  
+50%        861.000000  0.000000e+00  0.000000e+00  0.000000e+00  
+75%       1695.000000  0.000000e+00  0.000000e+00  0.000000e+00  
+max     138739.000000  5.830000e+02  7.590000e+02  1.261600e+04  
+
+Categorical columns:
+       AchievementType TierAchievementDate
+count         98593320            98100222
+unique               4                3259
+top            Scripts          11/06/2019
+freq          24648330             3597647
+
+===== UserOrganizations.csv =====
+Columns: ['Id', 'UserId', 'OrganizationId', 'JoinDate']
+Dtypes:
+Id                 int64
+UserId             int64
+OrganizationId     int64
+JoinDate          object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id        UserId  OrganizationId
+count   3830.000000  3.830000e+03     3830.000000
+mean    7162.402089  1.017501e+07     3245.068930
+std     2699.306426  9.815373e+06     1691.882988
+min        6.000000  1.000000e+00        2.000000
+25%     5472.250000  8.096910e+05     1625.250000
+50%     8073.500000  5.676002e+06     3967.000000
+75%     9216.750000  2.081342e+07     4682.750000
+max    10196.000000  2.737302e+07     5161.000000
+
+Categorical columns:
+          JoinDate
+count         3830
+unique        1074
+top     12/03/2024
+freq            82
+
+===== Teams.csv =====
+Columns: ['Id', 'CompetitionId', 'TeamLeaderId', 'TeamName', 'ScoreFirstSubmittedDate', 'LastSubmissionDate', 'PublicLeaderboardSubmissionId', 'PrivateLeaderboardSubmissionId', 'IsBenchmark', 'Medal', 'MedalAwardDate', 'PublicLeaderboardRank', 'PrivateLeaderboardRank', 'WriteUpForumTopicId']
+Dtypes:
+Id                                  int64
+CompetitionId                       int64
+TeamLeaderId                      float64
+TeamName                           object
+ScoreFirstSubmittedDate           float64
+LastSubmissionDate                 object
+PublicLeaderboardSubmissionId     float64
+PrivateLeaderboardSubmissionId    float64
+IsBenchmark                          bool
+Medal                             float64
+MedalAwardDate                     object
+PublicLeaderboardRank             float64
+PrivateLeaderboardRank            float64
+WriteUpForumTopicId               float64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+/usr/local/lib/python3.11/dist-packages/pandas/io/formats/format.py:1458: RuntimeWarning: invalid value encountered in greater
+  has_large_values = (abs_vals > 1e6).any()
+/usr/local/lib/python3.11/dist-packages/pandas/io/formats/format.py:1459: RuntimeWarning: invalid value encountered in less
+  has_small_values = ((abs_vals < 10 ** (-self.digits)) & (abs_vals > 0)).any()
+/usr/local/lib/python3.11/dist-packages/pandas/io/formats/format.py:1459: RuntimeWarning: invalid value encountered in greater
+  has_small_values = ((abs_vals < 10 ** (-self.digits)) & (abs_vals > 0)).any()
+                 Id  CompetitionId  TeamLeaderId  ScoreFirstSubmittedDate  \
+count  8.152908e+06   8.152908e+06  8.126451e+06                      0.0   
+mean   6.680609e+06   1.994515e+04  5.891915e+06                      NaN   
+std    3.934437e+06   2.012758e+04  5.940433e+06                      NaN   
+min    4.960000e+02   2.408000e+03  1.000000e+00                      NaN   
+25%    3.228144e+06   5.874000e+03  1.453635e+06                      NaN   
+50%    6.638806e+06   1.068600e+04  3.746934e+06                      NaN   
+75%    1.002995e+07   2.703700e+04  8.432530e+06                      NaN   
+max    1.398070e+07   9.542600e+04  2.741722e+07                      NaN   
+
+       PublicLeaderboardSubmissionId  PrivateLeaderboardSubmissionId  \
+count                   8.611940e+05                    8.611640e+05   
+mean                    1.874782e+07                    1.874759e+07   
+std                     1.281168e+07                    1.281150e+07   
+min                     2.182000e+03                    2.182000e+03   
+25%                     7.619133e+06                    7.618850e+06   
+50%                     1.743276e+07                    1.743173e+07   
+75%                     2.838002e+07                    2.837997e+07   
+max                     4.536326e+07                    4.536326e+07   
+
+              Medal  PublicLeaderboardRank  PrivateLeaderboardRank  \
+count  63034.000000          857449.000000           857419.000000   
+mean       2.416854             958.928859              958.962049   
+std        0.643072            1116.367869             1116.373297   
+min        0.000000               1.000000                1.000000   
+25%        2.000000             157.000000              157.000000   
+50%        2.000000             586.000000              586.000000   
+75%        3.000000            1347.000000             1347.000000   
+max        3.000000            8751.000000             8751.000000   
+
+       WriteUpForumTopicId  
+count          5084.000000  
+mean         271560.046223  
+std          172892.498547  
+min             185.000000  
+25%          110386.250000  
+50%          261255.000000  
+75%          430107.000000  
+max          584034.000000  
+
+Categorical columns:
+         TeamName LastSubmissionDate MedalAwardDate
+count     8152051             875463          83276
+unique    3015185               5478            337
+top     [Deleted]         04/10/2019     07/15/2016
+freq        19226               2025          14383
+
+===== UserFollowers.csv =====
