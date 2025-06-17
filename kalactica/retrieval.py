@@ -99,4 +99,18 @@ class Retriever:
         """
         if not self.storage:
             raise ValueError("S3 bucket not configured")
-        return self.storage.load_file(key) 
+        return self.storage.load_file(key)
+
+def build_index(*args, **kwargs):
+    """Module-level stub for build_index. Calls Retriever.build_index if possible."""
+    retriever = Retriever()
+    if args or kwargs:
+        return retriever.build_index(*args, **kwargs)
+    raise NotImplementedError("build_index requires arguments. See Retriever.build_index for usage.")
+
+def search(*args, **kwargs):
+    """Module-level stub for search. Calls Retriever.search if possible."""
+    retriever = Retriever()
+    if args or kwargs:
+        return retriever.search(*args, **kwargs)
+    raise NotImplementedError("search requires arguments. See Retriever.search for usage.") 
