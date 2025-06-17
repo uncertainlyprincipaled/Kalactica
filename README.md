@@ -51,8 +51,10 @@ python demo.py
 ```
 
 ### Colab/Kaggle Setup
+
+#### Colab:
 ```python
-# Mount Google Drive (Colab only)
+# Mount Google Drive
 from google.colab import drive
 drive.mount('/content/drive')
 
@@ -69,6 +71,43 @@ drive.mount('/content/drive')
 !kaggle datasets download -d kaggle/meta-kaggle-code
 !unzip meta-kaggle.zip -d data/
 !unzip meta-kaggle-code.zip -d data/
+```
+
+#### Kaggle:
+```python
+# Clone repository to /kaggle/working
+!git clone https://github.com/uncertainlyprincipaled/Kalactica.git /kaggle/working/Kalactica
+# Console
+%cd /kaggle/working/Kalactica
+
+# Install required dependencies
+!pip install opensearch-py
+!pip install python-dotenv
+!pip install faiss-cpu
+!pip install transformers
+!pip install peft
+!pip install gudhi  # Optional, for topology features
+
+# Install package in development mode
+# May need to restart kernel after running
+!pip install -e .
+
+# Set up Kaggle credentials (already available in Kaggle environment)
+import os
+os.environ['KAGGLE_CONFIG_DIR'] = '/kaggle/input/kaggle-api'
+
+# Download datasets (if not already in /kaggle/input)
+!kaggle datasets download -d kaggle/meta-kaggle
+!kaggle datasets download -d kaggle/meta-kaggle-code
+!unzip meta-kaggle.zip -d data/
+!unzip meta-kaggle-code.zip -d data/
+
+# Create necessary directories
+!mkdir -p data/processed
+!mkdir -p .env/kaggle
+
+# Note: Your kaggle.json is automatically available in the Kaggle environment
+# No need to manually copy it
 ```
 
 ### Lambda Labs Setup
@@ -93,12 +132,29 @@ The preprocessing step is designed to run on CPU and can be executed on Colab, K
 #### Colab/Kaggle:
 ```python
 # Run preprocessing
-!python -m kalactica.preprocess --input data/KernelVersions.csv --output data/processed.jsonl
+# Note: In Kaggle, we need to set environment variables directly
+# as python-dotenv doesn't work well with Kaggle's environment
+import os
+
+# Set required environment variables
+os.environ['KAGGLE_CONFIG_DIR'] = '/kaggle/input/kaggle-api'
+os.environ['DATA_DIR'] = '/kaggle/working/Kalactica/data'
+
+# Run preprocessing with explicit paths
+!python -m kalactica.preprocess \
+    --input /kaggle/input/meta-kaggle/KernelVersions.csv \
+    --output /kaggle/working/Kalactica/data/processed.jsonl
 ```
 
 #### Local:
 ```bash
-python -m kalactica.preprocess --input data/KernelVersions.csv --output data/processed.jsonl
+# Set up environment variables
+export DATA_DIR=$(pwd)/data
+
+# Run preprocessing
+python -m kalactica.preprocess \
+    --input /data/meta-kaggle/KernelVersions.csv \
+    --output data/processed.jsonl
 ```
 
 ### Model Training
