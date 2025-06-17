@@ -90,7 +90,7 @@ def main():
     lang_map = dict(zip(lang_df['Id'], lang_df['Name']))
 
     # Defensive check for required columns
-    required_cols = ['Id', 'Title', 'CurrentKernelVersionId', 'ScriptLanguageId']
+    required_cols = ['Id', 'Title', 'ScriptLanguageId']
     missing = [col for col in required_cols if col not in df.columns]
     if missing:
         raise ValueError(f"Missing required columns: {missing}. Found columns: {list(df.columns)}")
