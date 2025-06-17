@@ -75,11 +75,6 @@ drive.mount('/content/drive')
 
 #### Kaggle:
 ```python
-# Clone repository to /kaggle/working
-!git clone https://github.com/uncertainlyprincipaled/Kalactica.git /kaggle/working/Kalactica
-# Console
-%cd /kaggle/working/Kalactica
-
 # Install required dependencies
 !pip install opensearch-py
 !pip install python-dotenv
@@ -88,8 +83,13 @@ drive.mount('/content/drive')
 !pip install peft
 !pip install gudhi  # Optional, for topology features
 
-# Install package in development mode
-# May need to restart kernel after running
+# Clone repository to /kaggle/working
+!git clone https://github.com/uncertainlyprincipaled/Kalactica.git /kaggle/working/Kalactica
+
+# Change to the repo directory
+%cd /kaggle/working/Kalactica
+
+# Install package in development mode (required for module imports)
 !pip install -e .
 
 # Set up Kaggle credentials (already available in Kaggle environment)
@@ -131,16 +131,20 @@ The preprocessing step is designed to run on CPU and can be executed on Colab, K
 
 #### Colab/Kaggle:
 ```python
-# Run preprocessing
-# Note: In Kaggle, we need to set environment variables directly
-# as python-dotenv doesn't work well with Kaggle's environment
-import os
+# (If running in Kaggle, ensure you have run the Kaggle setup steps above first)
 
 # Set required environment variables
+import os
 os.environ['KAGGLE_CONFIG_DIR'] = '/kaggle/input/kaggle-api'
 os.environ['DATA_DIR'] = '/kaggle/working/Kalactica/data'
 
-# Run preprocessing with explicit paths
+# Validate the data
+!python -m kalactica.validation \
+    --kernel-versions /kaggle/input/meta-kaggle/KernelVersions.csv \
+    --notebooks-dir /kaggle/input/meta-kaggle \
+    --output validation_results.json
+
+# Preprocess (validation will run automatically if not skipped)
 !python -m kalactica.preprocess \
     --input /kaggle/input/meta-kaggle/KernelVersions.csv \
     --output /kaggle/working/Kalactica/data/processed.jsonl
