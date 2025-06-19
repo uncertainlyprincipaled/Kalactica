@@ -138,13 +138,22 @@ import os
 os.environ['KAGGLE_CONFIG_DIR'] = '/kaggle/input/kaggle-api'
 os.environ['DATA_DIR'] = '/kaggle/working/Kalactica/data'
 
-# Validate the data
+# Validate the data (with sampling for large datasets)
 !python -m kalactica.validation \
     --kernel-versions /kaggle/input/meta-kaggle/KernelVersions.csv \
     --notebooks-dir /kaggle/input/meta-kaggle \
     --languages /kaggle/input/meta-kaggle/KernelLanguages.csv \
+    --sample-size 1000 \
     --output validation_results.json
     
+# For a larger sample or full validation (use with caution)
+# !python -m kalactica.validation \
+#     --kernel-versions /kaggle/input/meta-kaggle/KernelVersions.csv \
+#     --notebooks-dir /kaggle/input/meta-kaggle \
+#     --languages /kaggle/input/meta-kaggle/KernelLanguages.csv \
+#     --sample-size 10000 \
+#     --output validation_results_large.json
+
 # Preprocess (validation will run automatically if not skipped)
 !python -m kalactica.preprocess \
     --input /kaggle/input/meta-kaggle/KernelVersions.csv \
@@ -160,6 +169,40 @@ export DATA_DIR=$(pwd)/data
 python -m kalactica.preprocess \
     --input /data/meta-kaggle/KernelVersions.csv \
     --output data/processed.jsonl
+```
+
+### Data Validation
+The validation system has been improved to handle large datasets efficiently:
+
+#### Key Improvements:
+- **Smart Sampling**: Uses stratified sampling by language to ensure representative validation
+- **Expanded Language Support**: Supports 20+ programming languages including Python, R, Julia, JavaScript, SQL, etc.
+- **Progress Tracking**: Shows validation progress for large datasets
+- **Detailed Reporting**: Provides language distribution and error breakdowns
+- **Configurable Sample Sizes**: Default 1000 samples, adjustable up to full dataset
+
+#### Validation Options:
+```bash
+# Quick validation with 1000 samples (recommended)
+python -m kalactica.validation \
+    --kernel-versions data/KernelVersions.csv \
+    --notebooks-dir data/notebooks \
+    --sample-size 1000 \
+    --output validation_results.json
+
+# Larger sample for more comprehensive validation
+python -m kalactica.validation \
+    --kernel-versions data/KernelVersions.csv \
+    --notebooks-dir data/notebooks \
+    --sample-size 10000 \
+    --output validation_results_large.json
+
+# Full validation (use with caution for large datasets)
+python -m kalactica.validation \
+    --kernel-versions data/KernelVersions.csv \
+    --notebooks-dir data/notebooks \
+    --no-sampling \
+    --output validation_results_full.json
 ```
 
 ### Model Training

@@ -1,0 +1,104 @@
+# DATA CONSTITUTION: Kaggle Meta-Datasets
+
+## Purpose
+This document defines the rules, patterns, and schema for the most relevant Kaggle meta-datasets. It is intended to be both human- and machine-readable, and should be referenced by all data validation, preprocessing, and modeling code.
+
+---
+
+## KernelVersions.csv
+- Id: int64 (unique, required)
+- ScriptId: int64 (required, FK to Kernels.csv)
+- ScriptLanguageId: int64 (required, maps to KernelLanguages.csv)
+- AuthorUserId: int64 (required, FK to Users.csv)
+- CreationDate: datetime (required, flexible format)
+- VersionNumber: int64 (required)
+- Title: string (required)
+- EvaluationDate: datetime (nullable)
+- IsChange: bool (required)
+- TotalLines: float64 (nullable, should be int if no missing)
+- LinesInsertedFromPrevious: float64 (nullable)
+- LinesChangedFromPrevious: float64 (nullable)
+- LinesUnchangedFromPrevious: float64 (nullable)
+- LinesInsertedFromFork: float64 (nullable)
+- LinesDeletedFromFork: float64 (nullable)
+- LinesChangedFromFork: float64 (nullable)
+- LinesUnchangedFromFork: float64 (nullable)
+- TotalVotes: int64 (required)
+- IsInternetEnabled: bool (required)
+- RunningTimeInMilliseconds: float64 (nullable)
+- AcceleratorTypeId: int64 (nullable)
+- DockerImage: string (nullable)
+- **Foreign Keys:**
+  - ScriptId → Kernels.Id
+  - ScriptLanguageId → KernelLanguages.Id
+  - AuthorUserId → Users.Id
+- **Missingness Policy:**
+  - Only nullable columns may have missing values. All others must be present.
+- **Special Notes:**
+  - Language mapping must be performed before validation.
+
+---
+
+## Kernels.csv
+- Id: int64 (unique, required)
+- CurrentKernelVersionId: int64 (required, FK to KernelVersions.csv)
+- AuthorUserId: int64 (required, FK to Users.csv)
+- Title: string (required)
+- CreationDate: datetime (required)
+- IsPrivate: bool (required)
+- ...
+- **Foreign Keys:**
+  - CurrentKernelVersionId → KernelVersions.Id
+  - AuthorUserId → Users.Id
+- **Missingness Policy:**
+  - Only nullable columns may have missing values.
+
+---
+
+## Competitions.csv
+- Id: int64 (unique, required)
+- Title: string (required)
+- HostSegmentId: int64 (nullable)
+- EnabledDate: datetime (nullable)
+- Deadline: datetime (nullable)
+- MaxDailySubmissions: int64 (nullable)
+- ...
+- **Foreign Keys:**
+  - HostSegmentId → (if present, see Segments.csv)
+- **Missingness Policy:**
+  - Only nullable columns may have missing values.
+- **Special Notes:**
+  - Dates may be missing for inactive competitions.
+
+---
+
+## Users.csv
+- Id: int64 (unique, required)
+- UserName: string (required)
+- DisplayName: string (nullable)
+- RegisterDate: datetime (nullable)
+- PerformanceTier: int64 (nullable)
+- ...
+- **Missingness Policy:**
+  - Only nullable columns may have missing values.
+- **Special Notes:**
+  - UserName should be unique.
+
+---
+
+## KernelLanguages.csv
+- Id: int64 (unique, required)
+- Name: string (required, e.g., 'Python', 'R', 'Julia', ...)
+- **Missingness Policy:**
+  - No missing values allowed.
+- **Special Notes:**
+  - Used for mapping ScriptLanguageId in KernelVersions.csv.
+
+---
+
+## General Rules
+- All date columns must be parsed with pd.to_datetime(errors='coerce').
+- All foreign key relationships should be checked if referenced datasets are available.
+- All summary statistics and checks should be derived from the sampled data.
+- This constitution should be updated if the schema or rules change.
+- All data operations should reference this file to ensure consistency and reproducibility. 

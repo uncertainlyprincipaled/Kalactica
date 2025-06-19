@@ -740,3 +740,723 @@ top     [Deleted]         04/10/2019     07/15/2016
 freq        19226               2025          14383
 
 ===== UserFollowers.csv =====
+Columns: ['Id', 'UserId', 'FollowingUserId', 'CreationDate']
+Dtypes:
+Id                  int64
+UserId              int64
+FollowingUserId     int64
+CreationDate       object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id        UserId  FollowingUserId
+count  1.703597e+06  1.703597e+06     1.703597e+06
+mean   9.944130e+05  8.028058e+06     4.679792e+06
+std    5.703894e+05  6.592235e+06     5.588061e+06
+min    1.000000e+00  3.680000e+02     1.000000e+00
+25%    5.021460e+05  2.655849e+06     7.082830e+05
+50%    9.996740e+05  6.158562e+06     2.353966e+06
+75%    1.487461e+06  1.171927e+07     6.595547e+06
+max    1.978572e+06  2.741699e+07     2.740981e+07
+
+Categorical columns:
+       CreationDate
+count       1703597
+unique         2948
+top      08/03/2021
+freq           2894
+
+===== CompetitionTags.csv =====
+Columns: ['Id', 'CompetitionId', 'TagId']
+Dtypes:
+Id               int64
+CompetitionId    int64
+TagId            int64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id  CompetitionId         TagId
+count   1118.000000    1118.000000   1118.000000
+mean    9186.082290   30772.050089  12287.118962
+std    14379.996407   24483.153943   3711.400947
+min        3.000000    3486.000000   1219.000000
+25%      382.500000    8426.000000  12026.000000
+50%      795.500000   25068.000000  14101.000000
+75%    15569.750000   47317.000000  14104.000000
+max    46238.000000   91844.000000  17174.000000
+
+===== Kernels.csv =====
+Columns: ['Id', 'AuthorUserId', 'CurrentKernelVersionId', 'ForkParentKernelVersionId', 'ForumTopicId', 'FirstKernelVersionId', 'CreationDate', 'EvaluationDate', 'MadePublicDate', 'IsProjectLanguageTemplate', 'CurrentUrlSlug', 'Medal', 'MedalAwardDate', 'TotalViews', 'TotalComments', 'TotalVotes']
+Dtypes:
+Id                             int64
+AuthorUserId                   int64
+CurrentKernelVersionId       float64
+ForkParentKernelVersionId    float64
+ForumTopicId                 float64
+FirstKernelVersionId         float64
+CreationDate                  object
+EvaluationDate                object
+MadePublicDate                object
+IsProjectLanguageTemplate       bool
+CurrentUrlSlug                object
+Medal                        float64
+MedalAwardDate                object
+TotalViews                     int64
+TotalComments                  int64
+TotalVotes                     int64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id  AuthorUserId  CurrentKernelVersionId  \
+count  1.497488e+06  1.497488e+06            1.297031e+06   
+mean   3.399335e+07  8.995276e+06            1.076509e+08   
+std    2.610869e+07  7.210541e+06            7.552527e+07   
+min    1.000000e+00  3.680000e+02            1.900000e+01   
+25%    1.087147e+07  2.351166e+06            3.952211e+07   
+50%    2.942910e+07  7.580410e+06            1.019178e+08   
+75%    5.448068e+07  1.413106e+07            1.710213e+08   
+max    8.522040e+07  2.741688e+07            2.457848e+08   
+
+       ForkParentKernelVersionId   ForumTopicId  FirstKernelVersionId  \
+count               3.159010e+05  200875.000000          1.495917e+06   
+mean                8.787810e+07  313475.219395          1.079410e+08   
+std                 7.564192e+07  157693.801246          7.571741e+07   
+min                 1.000000e+00   14433.000000          1.000000e+00   
+25%                 1.301952e+07  188673.500000          3.966784e+07   
+50%                 7.638193e+07  314191.000000          1.029738e+08   
+75%                 1.470514e+08  448409.000000          1.715139e+08   
+max                 2.457763e+08  584878.000000          2.457841e+08   
+
+               Medal    TotalViews  TotalComments    TotalVotes  
+count  149506.000000  1.497488e+06   1.497488e+06  1.497488e+06  
+mean        2.688701  6.541697e+02   7.581463e-01  3.886016e+00  
+std         0.598890  1.365015e+04   2.563362e+01  3.676394e+01  
+min         1.000000  0.000000e+00   0.000000e+00  0.000000e+00  
+25%         3.000000  3.700000e+01   0.000000e+00  0.000000e+00  
+50%         3.000000  1.080000e+02   0.000000e+00  0.000000e+00  
+75%         3.000000  3.070000e+02   0.000000e+00  2.000000e+00  
+max         3.000000  7.555221e+06   3.021600e+04  1.793300e+04  
+
+Categorical columns:
+               CreationDate EvaluationDate MadePublicDate CurrentUrlSlug  \
+count               1497301        1465946        1473370        1497486   
+unique              1481832           3722           3736        1130700   
+top     03/21/2022 16:02:50     03/20/2022     04/02/2022        titanic   
+freq                     29          19251          16328           3199   
+
+       MedalAwardDate  
+count          151255  
+unique           3218  
+top        07/15/2016  
+freq              573  
+
+===== Organizations.csv =====
+Columns: ['Id', 'Name', 'Slug', 'CreationDate', 'Description']
+Dtypes:
+Id               int64
+Name            object
+Slug            object
+CreationDate    object
+Description     object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                Id
+count  1015.000000
+mean   2730.867980
+std    1709.536387
+min       2.000000
+25%    1065.500000
+50%    2833.000000
+75%    4148.000000
+max    5161.000000
+
+Categorical columns:
+            Name      Slug CreationDate  \
+count       1015      1015         1015   
+unique      1015      1015          726   
+top     Facebook  facebook   08/31/2022   
+freq           1         1            9   
+
+                                          Description  
+count                                             399  
+unique                                            398  
+top     https://sites.google.com/corp/view/fgvc6/home  
+freq                                                2  
+
+===== Datasources.csv =====
+Columns: ['Id', 'CreatorUserId', 'CreationDate', 'Type', 'CurrentDatasourceVersionId']
+Dtypes:
+Id                              int64
+CreatorUserId                   int64
+CreationDate                   object
+Type                           object
+CurrentDatasourceVersionId    float64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id  CreatorUserId  CurrentDatasourceVersionId
+count  5.182860e+05   5.182860e+05                5.178590e+05
+mean   3.998138e+06   1.102258e+07                6.649626e+06
+std    2.309053e+06   7.195036e+06                3.667374e+06
+min    6.000000e+00   1.000000e+00                5.800000e+01
+25%    1.963443e+06   4.817280e+06                3.280967e+06
+50%    3.955196e+06   1.031733e+07                6.942606e+06
+75%    5.962160e+06   1.654949e+07                9.801562e+06
+max    8.081708e+06   2.740932e+07                1.272253e+07
+
+Categorical columns:
+               CreationDate     Type
+count                518286   518286
+unique               517163        2
+top     04/18/2025 12:01:38  Dataset
+freq                      7   495235
+
+===== ModelVersions.csv =====
+Columns: ['Id', 'ModelId', 'Title', 'Subtitle', 'ModelCard', 'CreationDate', 'OriginalPublishDate', 'CreatorUserId', 'ProvenanceSources']
+Dtypes:
+Id                      int64
+ModelId                 int64
+Title                  object
+Subtitle               object
+ModelCard              object
+CreationDate           object
+OriginalPublishDate    object
+CreatorUserId           int64
+ProvenanceSources      object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                  Id        ModelId  CreatorUserId
+count   21008.000000   21008.000000   2.100800e+04
+mean   190130.003046  190140.372239   1.725614e+07
+std    103056.383552  103058.696513   6.442840e+06
+min        14.000000      14.000000   7.670000e+02
+25%    101842.000000  101854.000000   1.316628e+07
+50%    183107.500000  183119.500000   1.875768e+07
+75%    277186.000000  277198.000000   2.216697e+07
+max    377893.000000  377905.000000   2.741266e+07
+
+Categorical columns:
+        Title                                        Subtitle  \
+count   21008                                            1626   
+unique  19031                                            1565   
+top     model  These models have an accuracy higher than 96%.   
+freq      117                                               9   
+
+                                                ModelCard  \
+count                                                2100   
+unique                                               1933   
+top     # Model Summary\n\nProvide a brief overview of...   
+freq                                                  148   
+
+               CreationDate OriginalPublishDate  \
+count                 21008                 293   
+unique                20992                 115   
+top     02/20/2024 08:00:00          10/06/2020   
+freq                      4                 109   
+
+                                        ProvenanceSources  
+count                                                1038  
+unique                                                817  
+top     https://github.com/tensorflow/tfhub.dev/tree/m...  
+freq                                                   69  
+
+===== ForumTopics.csv =====
+Columns: ['Id', 'ForumId', 'KernelId', 'LastForumMessageId', 'FirstForumMessageId', 'CreationDate', 'LastCommentDate', 'Title', 'IsSticky', 'TotalViews', 'Score', 'TotalMessages', 'TotalReplies']
+Dtypes:
+Id                       int64
+ForumId                  int64
+KernelId               float64
+LastForumMessageId     float64
+FirstForumMessageId    float64
+CreationDate            object
+LastCommentDate         object
+Title                   object
+IsSticky                  bool
+TotalViews               int64
+Score                    int64
+TotalMessages            int64
+TotalReplies             int64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                  Id       ForumId      KernelId  LastForumMessageId  \
+count  458084.000000  4.580840e+05  2.077330e+05        4.559350e+05   
+mean   289884.250696  5.308010e+05  2.854093e+07        1.702595e+06   
+std    166554.479996  1.276530e+06  2.195592e+07        9.286820e+05   
+min         1.000000  1.000000e+00  2.000000e+00        4.000000e+00   
+25%    147052.250000  2.239000e+03  1.093108e+07        9.195980e+05   
+50%    292100.500000  1.686000e+04  2.379649e+07        1.736877e+06   
+75%    432090.250000  1.686000e+04  4.250425e+07        2.503071e+06   
+max    584849.000000  8.124103e+06  8.520118e+07        3.225493e+06   
+
+       FirstForumMessageId     TotalViews          Score  TotalMessages  \
+count         4.557760e+05  458084.000000  458084.000000  458084.000000   
+mean          1.610543e+06      93.379583      12.363983       6.080859   
+std           9.252468e+05    1099.150672      66.422150      49.629326   
+min           1.000000e+00       0.000000    -256.000000       0.000000   
+25%           8.223580e+05       0.000000       1.000000       1.000000   
+50%           1.605250e+06       0.000000       3.000000       3.000000   
+75%           2.396619e+06       0.000000      11.000000       6.000000   
+max           3.225486e+06  301527.000000   17934.000000   30216.000000   
+
+        TotalReplies  
+count  458084.000000  
+mean        5.505263  
+std        49.630136  
+min         0.000000  
+25%         1.000000  
+50%         2.000000  
+75%         5.000000  
+max     30216.000000  
+
+Categorical columns:
+               CreationDate      LastCommentDate             Title
+count                458084               458084            301626
+unique               456820               457149            272525
+top     02/16/2020 18:50:59  08/03/2021 14:37:18  [Deleted Kernel]
+freq                     14                   10              6991
+
+===== DatasetVersions.csv =====
+Columns: ['Id', 'DatasetId', 'DatasourceVersionId', 'CreatorUserId', 'LicenseName', 'CreationDate', 'VersionNumber', 'Title', 'Slug', 'Subtitle', 'Description', 'VersionNotes', 'TotalCompressedBytes', 'TotalUncompressedBytes']
+Dtypes:
+Id                          int64
+DatasetId                   int64
+DatasourceVersionId         int64
+CreatorUserId               int64
+LicenseName                object
+CreationDate               object
+VersionNumber             float64
+Title                      object
+Slug                       object
+Subtitle                   object
+Description                object
+VersionNotes               object
+TotalCompressedBytes      float64
+TotalUncompressedBytes    float64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id     DatasetId  DatasourceVersionId  CreatorUserId  \
+count  1.269959e+06  1.269959e+06         1.269959e+06   1.269959e+06   
+mean   5.526160e+06  2.891586e+06         5.650673e+06   8.080189e+06   
+std    3.731480e+06  2.245202e+06         3.845874e+06   7.055076e+06   
+min    6.000000e+00  6.000000e+00         6.000000e+00   1.000000e+00   
+25%    2.095932e+06  9.741560e+05         2.136465e+06   1.842206e+06   
+50%    5.291227e+06  2.362271e+06         5.364311e+06   6.096594e+06   
+75%    8.866848e+06  4.727118e+06         9.026968e+06   1.275797e+07   
+max    1.218452e+07  7.674415e+06         1.272240e+07   2.740932e+07   
+
+       VersionNumber  TotalCompressedBytes  TotalUncompressedBytes  
+count   1.269950e+06          1.269846e+06            1.269847e+06  
+mean    2.561756e+02          1.179390e+09            1.642595e+09  
+std     1.193023e+03          6.866187e+10            6.884383e+10  
+min     1.000000e+00          0.000000e+00            0.000000e+00  
+25%     1.000000e+00          1.379698e+05            3.985655e+05  
+50%     4.000000e+00          5.265569e+06            1.368447e+07  
+75%     9.600000e+01          1.923177e+08            3.310990e+08  
+max     1.617100e+04          7.639287e+13            7.639287e+13  
+
+Categorical columns:
+       LicenseName         CreationDate      Title       Slug  \
+count      1269959              1269959    1269958    1269959   
+unique          32              1259440     436873     409328   
+top        Unknown  06/10/2023 21:51:54  covid19co  covid19co   
+freq        532865                    6      16169      16169   
+
+                                                 Subtitle  \
+count                                              627716   
+unique                                              99313   
+top     Daily map.sql snapshot collection from Travian...   
+freq                                                21835   
+
+                                              Description     VersionNotes  
+count                                              566438          1269862  
+unique                                             120209           123813  
+top     This dataset contains serveral snapshots (one ...  Initial release  
+freq                                                21701           486816  
+
+===== ModelVotes.csv =====
+Columns: ['Id', 'UserId', 'ModelId', 'VoteDate']
+Dtypes:
+Id           int64
+UserId       int64
+ModelId      int64
+VoteDate    object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id        UserId        ModelId
+count  38605.000000  3.860500e+04   38605.000000
+mean   42233.268929  1.669335e+07   56933.641756
+std    24413.790416  7.248706e+06   89902.216093
+min      363.000000  6.500000e+02      14.000000
+25%    20732.000000  1.190502e+07    1281.000000
+50%    42949.000000  1.819450e+07    3301.000000
+75%    62914.000000  2.235130e+07   91102.000000
+max    85441.000000  2.741715e+07  377086.000000
+
+Categorical columns:
+          VoteDate
+count        38605
+unique         841
+top     02/22/2024
+freq           595
+
+===== DatasetVotes.csv =====
+Columns: ['Id', 'UserId', 'DatasetVersionId', 'VoteDate']
+Dtypes:
+Id                   int64
+UserId               int64
+DatasetVersionId     int64
+VoteDate            object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id        UserId  DatasetVersionId
+count  2.228514e+06  2.228514e+06      2.228514e+06
+mean   1.986893e+06  1.026351e+07      3.316223e+06
+std    1.196135e+06  6.777730e+06      3.150108e+06
+min    4.000000e+01  3.810000e+02      6.000000e+00
+25%    9.561952e+05  4.608720e+06      6.101180e+05
+50%    1.868174e+06  9.682457e+06      2.314697e+06
+75%    3.038148e+06  1.483610e+07      5.465969e+06
+max    4.185849e+06  2.741339e+07      1.218459e+07
+
+Categorical columns:
+          VoteDate
+count      2228514
+unique        3448
+top     06/20/2022
+freq         17504
+
+===== TeamMemberships.csv =====
+Columns: ['Id', 'TeamId', 'UserId', 'RequestDate']
+Dtypes:
+Id              int64
+TeamId          int64
+UserId          int64
+RequestDate    object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id        TeamId        UserId
+count  8.336758e+06  8.336758e+06  8.336758e+06
+mean   6.870591e+06  6.678632e+06  5.888284e+06
+std    4.049995e+06  3.932455e+06  5.937632e+06
+min    1.643600e+04  4.960000e+02  1.000000e+00
+25%    3.305753e+06  3.229477e+06  1.450808e+06
+50%    6.833298e+06  6.633150e+06  3.747085e+06
+75%    1.031912e+07  1.002703e+07  8.428766e+06
+max    1.440864e+07  1.398070e+07  2.741722e+07
+
+Categorical columns:
+       RequestDate
+count      8329143
+unique        5115
+top     11/24/2020
+freq          7626
+
+===== Forums.csv =====
+Columns: ['Id', 'ParentForumId', 'Title']
+Dtypes:
+Id                 int64
+ParentForumId    float64
+Title             object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id  ParentForumId
+count  5.519600e+05   5.519090e+05
+mean   4.038199e+06   9.921842e+04
+std    2.344449e+06   4.944002e+05
+min    1.000000e+00   5.000000e+00
+25%    1.991746e+06   1.023000e+03
+50%    3.941244e+06   1.023000e+03
+75%    6.052882e+06   1.023000e+03
+max    8.146523e+06   7.104026e+06
+
+Categorical columns:
+                                                    Title
+count                                              551771
+unique                                             475723
+top     [orphaned from bad competition backfill in PR ...
+freq                                                12000
+
+===== KernelVersions.csv =====
+Columns: ['Id', 'ScriptId', 'ParentScriptVersionId', 'ScriptLanguageId', 'AuthorUserId', 'CreationDate', 'VersionNumber', 'Title', 'EvaluationDate', 'IsChange', 'TotalLines', 'LinesInsertedFromPrevious', 'LinesChangedFromPrevious', 'LinesUnchangedFromPrevious', 'LinesInsertedFromFork', 'LinesDeletedFromFork', 'LinesChangedFromFork', 'LinesUnchangedFromFork', 'TotalVotes', 'IsInternetEnabled', 'RunningTimeInMilliseconds', 'AcceleratorTypeId', 'DockerImage']
+Dtypes:
+Id                              int64
+ScriptId                        int64
+ParentScriptVersionId         float64
+ScriptLanguageId                int64
+AuthorUserId                    int64
+CreationDate                   object
+VersionNumber                 float64
+Title                          object
+EvaluationDate                 object
+IsChange                         bool
+TotalLines                    float64
+LinesInsertedFromPrevious     float64
+LinesChangedFromPrevious      float64
+LinesUnchangedFromPrevious    float64
+LinesInsertedFromFork         float64
+LinesDeletedFromFork          float64
+LinesChangedFromFork          float64
+LinesUnchangedFromFork        float64
+TotalVotes                      int64
+IsInternetEnabled                bool
+RunningTimeInMilliseconds     float64
+AcceleratorTypeId               int64
+DockerImage                    object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id      ScriptId  ParentScriptVersionId  ScriptLanguageId  \
+count  1.498851e+07  1.498851e+07           1.518670e+05      1.498851e+07   
+mean   1.115720e+08  3.388848e+07           3.143055e+06      8.385115e+00   
+std    7.301303e+07  2.484641e+07           4.748913e+05      1.572608e+00   
+min    1.000000e+00  1.000000e+00           6.656400e+04      1.000000e+00   
+25%    4.598898e+07  1.213033e+07           2.742478e+06      8.000000e+00   
+50%    1.076920e+08  2.970894e+07           3.102863e+06      8.000000e+00   
+75%    1.723658e+08  5.241954e+07           3.539512e+06      9.000000e+00   
+max    2.457850e+08  8.522040e+07           4.103719e+06      1.600000e+01   
+
+       AuthorUserId  VersionNumber    TotalLines  LinesInsertedFromPrevious  \
+count  1.498851e+07   5.884352e+06  5.938532e+06               6.042842e+06   
+mean   8.568082e+06   4.237535e+02  3.151768e+02               5.611005e+01   
+std    6.844763e+06   4.060766e+03  4.473740e+02               1.748928e+02   
+min    3.680000e+02   1.000000e+00  0.000000e+00               0.000000e+00   
+25%    2.752463e+06   2.000000e+00  9.800000e+01               0.000000e+00   
+50%    6.684140e+06   5.000000e+00  1.990000e+02               4.000000e+00   
+75%    1.315089e+07   1.600000e+01  3.870000e+02               4.800000e+01   
+max    2.741688e+07   6.647800e+04  1.201100e+05               1.201100e+05   
+
+       LinesChangedFromPrevious  LinesUnchangedFromPrevious  \
+count              6.042842e+06                6.042842e+06   
+mean               3.999284e-01                2.641890e+02   
+std                6.756300e+00                4.256227e+02   
+min                0.000000e+00                0.000000e+00   
+25%                0.000000e+00                4.000000e+01   
+50%                0.000000e+00                1.520000e+02   
+75%                0.000000e+00                3.360000e+02   
+max                3.038000e+03                1.004100e+05   
+
+       LinesInsertedFromFork  LinesDeletedFromFork  LinesChangedFromFork  \
+count          996540.000000         996540.000000         996540.000000   
+mean              153.446629             84.833249              2.121910   
+std               385.309774            197.581270             16.227885   
+min                 0.000000              0.000000              0.000000   
+25%                 7.000000              3.000000              0.000000   
+50%                43.000000             17.000000              0.000000   
+75%               165.000000             89.000000              0.000000   
+max            100008.000000          19830.000000           1222.000000   
+
+       LinesUnchangedFromFork    TotalVotes  RunningTimeInMilliseconds  \
+count           996540.000000  1.498851e+07               1.496134e+07   
+mean               278.067881  3.882407e-01               2.822380e+06   
+std                384.410828  8.692704e+00               5.326965e+06   
+min                  0.000000  0.000000e+00               0.000000e+00   
+25%                 73.000000  0.000000e+00               2.214700e+04   
+50%                160.000000  0.000000e+00               6.123170e+05   
+75%                333.000000  0.000000e+00               3.569819e+06   
+max              24107.000000  1.078400e+04               9.717263e+08   
+
+       AcceleratorTypeId  
+count       1.498851e+07  
+mean        8.581051e-01  
+std         2.015722e+00  
+min         0.000000e+00  
+25%         0.000000e+00  
+50%         0.000000e+00  
+75%         0.000000e+00  
+max         1.300000e+01  
+
+Categorical columns:
+               CreationDate     Title EvaluationDate  \
+count              14988506  14975285       13842562   
+unique             14300923   2084695           3722   
+top     03/21/2022 16:02:50   Titanic     03/20/2022   
+freq                     37     30433          23099   
+
+                                              DockerImage  
+count                                            13389758  
+unique                                                475  
+top     gcr.io/kaggle-images/python@sha256:a16cda2c5d5...  
+freq                                               306206  
+
+===== ModelVariationVersions.csv =====
+Columns: ['Id', 'ModelVariationId', 'ModelVersionId', 'DatasourceVersionId', 'CreationDate', 'VariationOverview', 'VariationUsage', 'FineTunable', 'SourceUrl', 'SourceOrganizationName']
+Dtypes:
+Id                         int64
+ModelVariationId           int64
+ModelVersionId             int64
+DatasourceVersionId        int64
+CreationDate              object
+VariationOverview         object
+VariationUsage            object
+FineTunable               object
+SourceUrl                 object
+SourceOrganizationName    object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                  Id  ModelVariationId  ModelVersionId  DatasourceVersionId
+count   29850.000000      29850.000000    29850.000000         2.985000e+04
+mean   191418.184824     157838.440704   174128.182580         9.991013e+06
+std    131394.361940     108330.244350   113248.380971         2.022105e+06
+min       142.000000         95.000000       14.000000         4.904011e+06
+25%     77931.250000      63585.000000    81076.500000         9.131093e+06
+50%    177688.500000     147581.000000   167317.500000         1.027382e+07
+75%    298419.500000     252620.250000   271981.750000         1.153644e+07
+max    437170.000000     356611.000000   377893.000000         1.272441e+07
+
+Categorical columns:
+               CreationDate  \
+count                 29850   
+unique                29626   
+top     05/13/2024 00:00:00   
+freq                     59   
+
+                                        VariationOverview  \
+count                                                5039   
+unique                                               2885   
+top     A multimodal transformer which outputs a score...   
+freq                                                   54   
+
+                                           VariationUsage FineTunable  \
+count                                                5148       29791   
+unique                                               3743           2   
+top     # Model Format\n\n# Training Data\n\n# Model I...        True   
+freq                                                   32       26438   
+
+                                                SourceUrl  \
+count                                                2570   
+unique                                               2570   
+top     https://tfhub.dev/tensorflow/tfjs-model/deepla...   
+freq                                                    1   
+
+       SourceOrganizationName  
+count                    2488  
+unique                      2  
+top                TensorFlow  
+freq                     2458  
+
+===== ForumMessages.csv =====
+Columns: ['Id', 'ForumTopicId', 'PostUserId', 'PostDate', 'ReplyToForumMessageId', 'Message', 'RawMarkdown', 'Medal', 'MedalAwardDate']
+Dtypes:
+Id                         int64
+ForumTopicId               int64
+PostUserId                 int64
+PostDate                  object
+ReplyToForumMessageId    float64
+Message                   object
+RawMarkdown               object
+Medal                    float64
+MedalAwardDate            object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id  ForumTopicId    PostUserId  ReplyToForumMessageId  \
+count  2.703968e+06  2.703968e+06  2.703968e+06           1.438926e+06   
+mean   1.598901e+06  2.751601e+05  6.182501e+06           1.790411e+06   
+std    9.299948e+05  1.694604e+05  5.775441e+06           8.648698e+05   
+min    1.000000e+00  1.000000e+00  6.200000e+01           1.400000e+01   
+25%    7.936245e+05  1.191590e+05  1.531960e+06           1.074750e+06   
+50%    1.590444e+06  2.718610e+05  4.447076e+06           1.833015e+06   
+75%    2.405730e+06  4.254330e+05  9.316887e+06           2.536788e+06   
+max    3.225493e+06  5.848490e+05  2.741098e+07           3.225480e+06   
+
+              Medal  
+count  1.133879e+06  
+mean   2.895900e+00  
+std    3.920867e-01  
+min    1.000000e+00  
+25%    3.000000e+00  
+50%    3.000000e+00  
+75%    3.000000e+00  
+max    3.000000e+00  
+
+Categorical columns:
+                   PostDate            Message RawMarkdown MedalAwardDate
+count               2703968            2696804     2634312        1216581
+unique              2680747            2445947     2371130           3255
+top     08/26/2010 08:06:02  <p>Thank you!</p>  Thank you!     07/15/2016
+freq                     56               7425        7929          28030
+
+===== KernelVersionDatasetSources.csv =====
+Columns: ['Id', 'KernelVersionId', 'SourceDatasetVersionId']
+Dtypes:
+Id                        int64
+KernelVersionId           int64
+SourceDatasetVersionId    int64
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id  KernelVersionId  SourceDatasetVersionId
+count  1.006940e+07     1.006940e+07            1.006940e+07
+mean   1.654024e+08     1.193355e+08            3.417450e+06
+std    1.026610e+08     7.103693e+07            3.413149e+06
+min    2.800000e+01     2.933100e+04            7.000000e+00
+25%    7.069509e+07     5.570997e+07            4.713820e+05
+50%    1.681724e+08     1.190608e+08            2.142244e+06
+75%    2.555923e+08     1.784552e+08            5.848592e+06
+max    3.358379e+08     2.457835e+08            1.218649e+07
+
+===== Episodes.csv =====
+Columns: ['Id', 'Type', 'CompetitionId', 'CreateTime', 'EndTime']
+Dtypes:
+Id                int64
+Type              int64
+CompetitionId     int64
+CreateTime       object
+EndTime          object
+dtype: object
+
+Descriptive statistics:
+
+Numeric columns:
+                 Id          Type  CompetitionId
+count  7.128634e+07  7.128634e+07   7.128634e+07
+mean   3.605472e+07  1.013729e+00   3.855822e+04
+std    2.083445e+07  2.024775e-01   2.508234e+04
+min    1.721700e+04  1.000000e+00   1.759200e+04
+25%    1.804121e+07  1.000000e+00   2.283800e+04
+50%    3.589958e+07  1.000000e+00   2.540100e+04
+75%    5.398015e+07  1.000000e+00   4.504000e+04
+max    7.251038e+07  4.000000e+00   8.971200e+04
+
+Categorical columns:
