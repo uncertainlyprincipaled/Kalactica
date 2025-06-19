@@ -36,6 +36,19 @@ def make_json_serializable(obj):
         except Exception:
             return str(obj)
 
+def canonicalize_language(lang):
+    python_synonyms = {'python', 'ipython notebook html', 'ipython notebook'}
+    r_synonyms = {'r', 'rmarkdown', 'r notebook html'}
+    if isinstance(lang, str):
+        lang_lower = lang.strip().lower()
+        if lang_lower in python_synonyms:
+            return 'python'
+        elif lang_lower in r_synonyms:
+            return 'r'
+        else:
+            return 'other'
+    return 'other'
+
 class DataValidator:
     """Validates Kaggle notebook data before preprocessing."""
     
@@ -407,6 +420,18 @@ class DataValidator:
             
             # Add to results
             self.validation_results['validation_issues'] = self.validation_issues
+            
+            # Canonicalize language
+            df['CanonicalLanguage'] = df['Language'].apply(canonicalize_language)
+            
+            # Validate canonical language distribution
+            valid_canon_langs = {'python', 'r'}
+            invalid_languages = df[~df['CanonicalLanguage'].isin(valid_canon_langs)]
+            if not invalid_languages.empty:
+                unique_invalid = invalid_languages['CanonicalLanguage'].unique()
+                errors.append(f"Invalid canonical languages found: {unique_invalid[:10]}...")
+                self.validation_results['validation_errors']['invalid_language'] += len(invalid_languages)
+                logger.warning(f"Found {len(unique_invalid)} unique invalid canonical languages")
             
         except Exception as e:
             msg = f"Error reading KernelVersions.csv: {str(e)}"
