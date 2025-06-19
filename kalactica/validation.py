@@ -65,6 +65,7 @@ class DataValidator:
                 'sampling_method': 'stratified' if sample_size else 'none'
             }
         }
+        self.validation_issues = []
 
     def sample_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
         """Sample the dataframe for validation."""
@@ -270,7 +271,16 @@ class DataValidator:
     def validate_dataset(self, kernel_versions_path: Path, notebooks_dir: Path, languages_path: Optional[Path] = None) -> Dict[str, Any]:
         """Validate entire dataset with optional sampling."""
         try:
-            df = pd.read_csv(kernel_versions_path)
+            import warnings
+            with warnings.catch_warnings(record=True) as wlist:
+                warnings.simplefilter("always")
+                df = pd.read_csv(kernel_versions_path, low_memory=False)
+                for w in wlist:
+                    if issubclass(w.category, pd.errors.DtypeWarning):
+                        msg = f"DtypeWarning: {w.message}"
+                        logger.warning(msg)
+                        self.validation_issues.append(msg)
+            
             logger.info(f"Loaded {len(df)} notebooks from {kernel_versions_path}")
             
             # Always map ScriptLanguageId to language name before any validation
@@ -282,7 +292,9 @@ class DataValidator:
                         df['Language'] = df['ScriptLanguageId'].map(lang_map).fillna('unknown')
                         logger.info(f"Mapped languages using {languages_path}")
                 except Exception as e:
-                    logger.warning(f"Error mapping languages: {e}")
+                    msg = f"Error mapping languages: {e}"
+                    logger.warning(msg)
+                    self.validation_issues.append(msg)
                     df['Language'] = 'unknown'
             elif 'Language' not in df.columns:
                 df['Language'] = 'unknown'
@@ -359,7 +371,7 @@ class DataValidator:
             
             # Derive summary stats from sample
             describe_stats = df.describe(include='all').to_dict()
-            self.validation_results['sample_summary'] = describe_stats
+            self.validation_results['sample_summary'] = make_json_serializable(describe_stats)
             self.validation_results['language_distribution'] = df['Language'].value_counts().to_dict()
             
             # Data Constitution check
@@ -371,8 +383,29 @@ class DataValidator:
                 with open(constitution_path) as f:
                     self.validation_results['data_constitution'] = f.read(2048)  # preview first 2KB
             
+            # Dtype consistency check
+            dtype_issues = []
+            for col in df.columns:
+                try:
+                    types = df[col].map(type).value_counts()
+                    if len(types) > 1:
+                        msg = f"Column '{col}' has mixed types: {dict(types)}"
+                        logger.warning(msg)
+                        dtype_issues.append(msg)
+                except Exception as e:
+                    msg = f"Error checking types for column '{col}': {str(e)}"
+                    logger.warning(msg)
+                    dtype_issues.append(msg)
+            if dtype_issues:
+                self.validation_issues.extend(dtype_issues)
+            
+            # Add to results
+            self.validation_results['validation_issues'] = self.validation_issues
+            
         except Exception as e:
-            logger.error(f"Error reading KernelVersions.csv: {str(e)}")
+            msg = f"Error reading KernelVersions.csv: {str(e)}"
+            logger.error(msg)
+            self.validation_issues.append(msg)
             return self.validation_results
         
         return self.validation_results
