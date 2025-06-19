@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 def make_json_serializable(obj):
     if isinstance(obj, dict):
-        return {k: make_json_serializable(v) for k, v in obj.items()}
+        return {str(k): make_json_serializable(v) for k, v in obj.items()}
     elif isinstance(obj, list):
         return [make_json_serializable(v) for v in obj]
     elif isinstance(obj, (np.integer, int)):
@@ -27,8 +27,14 @@ def make_json_serializable(obj):
         return obj.tolist()
     elif isinstance(obj, (pd.Timestamp, datetime)):
         return str(obj)
+    elif hasattr(obj, 'isoformat'):
+        return obj.isoformat()
     else:
-        return obj
+        try:
+            json.dumps(obj)
+            return obj
+        except Exception:
+            return str(obj)
 
 class DataValidator:
     """Validates Kaggle notebook data before preprocessing."""
