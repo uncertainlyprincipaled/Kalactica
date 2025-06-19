@@ -14,6 +14,22 @@ import numpy as np
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+def make_json_serializable(obj):
+    if isinstance(obj, dict):
+        return {k: make_json_serializable(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [make_json_serializable(v) for v in obj]
+    elif isinstance(obj, (np.integer, int)):
+        return int(obj)
+    elif isinstance(obj, (np.floating, float)):
+        return float(obj)
+    elif isinstance(obj, (np.ndarray,)):
+        return obj.tolist()
+    elif isinstance(obj, (pd.Timestamp, datetime)):
+        return str(obj)
+    else:
+        return obj
+
 class DataValidator:
     """Validates Kaggle notebook data before preprocessing."""
     
@@ -488,7 +504,7 @@ def main():
     )
     if args.output:
         with open(args.output, 'w') as f:
-            json.dump(results, f, indent=2)
+            json.dump(make_json_serializable(results), f, indent=2)
         logger.info(f"Validation results saved to {args.output}")
     # Print summary
     print("\nValidation Summary:")
